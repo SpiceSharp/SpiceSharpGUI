@@ -20,6 +20,12 @@
                     </ScrollViewer>
                 </DockPanel>
             </TabItem>
+            <TabItem Header="Internals" Name="CircuitElementsPanelTab">
+                <DockPanel Height="Auto" Name="CircuitElementsPanel" Width="Auto" >
+                    <TreeView Name="CircuitElementsTreeView">
+                    </TreeView>
+                </DockPanel>
+            </TabItem>
             <TabItem Name="LogsTab" Header="Logs">
                 <DockPanel Height="Auto" Name="WarningsPanel" Width="Auto" >
                     <TextBox Name="txtLogs" IsEnabled="False" AcceptsReturn="True" />

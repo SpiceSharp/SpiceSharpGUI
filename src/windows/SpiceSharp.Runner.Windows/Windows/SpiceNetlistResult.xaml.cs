@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Runner.Windows.Controls;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Runner.Windows.Controls;
 using SpiceSharp.Simulations;
 using System;
 using System.Diagnostics;
@@ -96,8 +97,9 @@ namespace SpiceSharp.Runner.Windows
                 // Simulation run
                 foreach (BaseSimulation simulation in sNetlist.Simulations)
                 {
-                    RunSimulation(secondaryWatch, sNetlist, simulation);
+                    RunSimulation(secondaryWatch, sNetlist, simulation);                    
                 }
+
 
                 // Plots 
                 RunOnGUIThread(() =>
@@ -160,9 +162,39 @@ namespace SpiceSharp.Runner.Windows
         {
             secondaryWatch.Reset();
             secondaryWatch.Start();
+
+            simulation.FinalizeSimulationExport += (arg,e) => {
+                // Circuit object tab
+                RunOnGUIThread(() =>
+                {
+                    TreeViewItem simulationItem = new TreeViewItem() { Header = simulation.Name };
+                    TreeViewItem objects = new TreeViewItem() { Header = "Objects" };
+                    simulationItem.Items.Add(objects);
+
+                    var enumerator = sNetlist.Circuit.Objects.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        var entity = enumerator.Current;
+                        TreeViewItem item = new TreeViewItem() { Header = (entity.Name + "     -    (" + entity.ToString() + ")") };
+                        objects.Items.Add(item);
+                    }
+
+                    TreeViewItem variables = new TreeViewItem() { Header = "Variables" };
+                    simulationItem.Items.Add(variables);
+
+                    foreach (var variable in simulation.Nodes.GetVariables())
+                    {
+                        TreeViewItem item = new TreeViewItem() { Header = variable.Name };
+                        variables.Items.Add(item);
+                    }
+
+                    this.CircuitElementsTreeView.Items.Add(simulationItem);
+                });
+            };
             simulation.Run(sNetlist.Circuit);
             secondaryWatch.Stop();
 
+            // Stats
             RunOnGUIThread(() =>
             {
                 AppendStats("---");
