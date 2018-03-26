@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Components;
 using SpiceSharp.Runner.Windows.Controls;
 using SpiceSharp.Simulations;
 using System;
@@ -175,7 +176,18 @@ namespace SpiceSharp.Runner.Windows
                     while (enumerator.MoveNext())
                     {
                         var entity = enumerator.Current;
-                        TreeViewItem item = new TreeViewItem() { Header = (entity.Name + "     -    (" + entity.ToString() + ")") };
+                        TreeViewItem item = new TreeViewItem() { Header = (string.Format("{0}     -    ({1})", entity.Name, entity)) };
+
+                        if (entity is Component c)
+                        {
+                            for (var i = 0; i < c.PinCount; i++)
+                            {
+                                var nodeId = c.GetNode(i);
+                                TreeViewItem nodeItem = new TreeViewItem() { Header = (string.Format("Node: {0}", nodeId)) };
+                                item.Items.Add(nodeItem);
+                            }
+                        }
+
                         objects.Items.Add(item);
                     }
 
@@ -184,7 +196,7 @@ namespace SpiceSharp.Runner.Windows
 
                     foreach (var variable in simulation.Nodes.GetVariables())
                     {
-                        TreeViewItem item = new TreeViewItem() { Header = variable.Name };
+                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", variable.Name, variable.UnknownType)};
                         variables.Items.Add(item);
                     }
 
