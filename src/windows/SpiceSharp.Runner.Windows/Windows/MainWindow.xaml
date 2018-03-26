@@ -9,10 +9,17 @@
     <DockPanel Height="Auto" Name="stackPanel1" Width="Auto" LastChildFill="True">
         <Menu IsMainMenu="True" DockPanel.Dock="Top">
             <MenuItem Header="_File">
+                <MenuItem Header="_Open" Click="Open_Click" />
+                <MenuItem Header="_Save" Click="Save_Click" />
                 <MenuItem Header="_Exit" Click="Exit_Click" />
             </MenuItem>
             <MenuItem Header="_Run" Click="Run_Click"/>
         </Menu>
+        <StatusBar Width="Auto" DockPanel.Dock="Bottom" Height="20">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" />
+            </StatusBarItem>
+        </StatusBar>
         <DockPanel Height="Auto" Name="stackPanel2" Width="Auto" >
             <ScrollViewer>
                 <TextBox Name="txtEditor" AcceptsReturn="True" />

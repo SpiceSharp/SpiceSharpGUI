@@ -1,23 +1,15 @@
 ﻿using SpiceSharp.Runner.Windows.Controls;
+using SpiceSharp.Simulations;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SpiceSharp.Runner.Windows
 {
     /// <summary>
-    /// Refactor !!!!!!!!
+    /// Spice netlist run result window
     /// </summary>
     public partial class SpiceNetlistResult : Window
     {
@@ -25,86 +17,92 @@ namespace SpiceSharp.Runner.Windows
         {
             InitializeComponent();
         }
-
-        public string Netlist { get; }
-
+       
         public SpiceNetlistResult(string netlist) : this()
         {
             Netlist = netlist;
 
-            this.lblStatus.Text = "Status: Running ...";
-            this.txtNetlist.Text = netlist;
-            PlotsTab.IsEnabled = false;
-            LogsTab.IsEnabled = false;
-            Task.Run(() => Init());
+            Task.Run(() => Run());
         }
 
-        private void Init()
+        /// <summary>
+        /// Gets the netlist 
+        /// </summary>
+        public string Netlist { get; }
+
+        private void Run()
         {
+            RunOnGUIThread(() =>
+            {
+                lblStatus.Text = "Status: Running ...";
+                txtNetlist.Text = Netlist;
+                PlotsTab.IsEnabled = false;
+                LogsTab.IsEnabled = false;
+            });
+
             Stopwatch mainWatch = new Stopwatch();
             Stopwatch secondaryWatch = new Stopwatch();
             try
             {
                 mainWatch.Start();
 
+                // Tokenization generation
                 secondaryWatch.Start();
                 var tokens = SpiceHelper.GetTokens(Netlist);
                 secondaryWatch.Stop();
-                
-
-                this.txtStats.Dispatcher.Invoke(() =>
-               {
-                   this.txtStats.Text += $"Tokenization time: { secondaryWatch.ElapsedMilliseconds} ms \n";
-               });
-
+                RunOnGUIThread(() =>
+                {
+                   AppendStats($"Tokenization time: { secondaryWatch.ElapsedMilliseconds} ms");
+                });
+    
+                // Parse tree generation
                 secondaryWatch.Reset();
                 secondaryWatch.Start();
                 var parseTree = SpiceHelper.GetParseTree(tokens);
                 secondaryWatch.Stop();
-                this.txtStats.Dispatcher.Invoke(() =>
+                RunOnGUIThread(() =>
                 {
-                    this.txtStats.Text += $"Parse tree generation time: { secondaryWatch.ElapsedMilliseconds} ms \n";
+                    AppendStats($"Parse tree generation time: { secondaryWatch.ElapsedMilliseconds} ms");
                 });
 
+                // Netlist object model generation
                 secondaryWatch.Reset();
                 secondaryWatch.Start();
                 var netlist = SpiceHelper.GetNetlist(parseTree);
                 secondaryWatch.Stop();
-                this.txtStats.Dispatcher.Invoke(() =>
+                RunOnGUIThread(() =>
                 {
-                    this.txtStats.Text += $"Netlist object model generation time: { secondaryWatch.ElapsedMilliseconds} ms \n";
+                    AppendStats($"Netlist object model generation time: { secondaryWatch.ElapsedMilliseconds} ms");
                 });
 
+                // Translating Netlist object model to Spice# 
                 secondaryWatch.Reset();
                 secondaryWatch.Start();
                 var sNetlist = SpiceHelper.GetSpiceSharpNetlist(netlist);
                 secondaryWatch.Stop();
-                this.txtStats.Dispatcher.Invoke(() =>
+
+                RunOnGUIThread(() =>
                 {
-                    this.txtStats.Text += $"Translating Netlist object model to Spice# time: { secondaryWatch.ElapsedMilliseconds} ms \n";
+                    AppendStats($"Translating Netlist object model to Spice# time: { secondaryWatch.ElapsedMilliseconds} ms");
                 });
 
-                this.txtStats.Dispatcher.Invoke(() =>
+                // Simulations
+                RunOnGUIThread(() =>
                 {
-                    this.txtStats.Text += $"--- \n";
-                    this.txtStats.Text += $"Simulations found: {sNetlist.Simulations.Count}\n";
+                    AppendStats($"---");
+                    AppendStats($"Simulations found: {sNetlist.Simulations.Count}");
                 });
 
-                foreach (var simulation in sNetlist.Simulations)
+                // Simulation run
+                foreach (BaseSimulation simulation in sNetlist.Simulations)
                 {
-                    secondaryWatch.Reset();
-                    secondaryWatch.Start();
-                    simulation.Run(sNetlist.Circuit);
-                    secondaryWatch.Stop();
-                    this.txtStats.Dispatcher.Invoke(() =>
-                    {
-                        this.txtStats.Text += $"Finished executing simulation {simulation.Name} ({simulation.GetType()}) in {secondaryWatch.ElapsedMilliseconds} ms\n";
-                    });
+                    RunSimulation(secondaryWatch, sNetlist, simulation);
                 }
 
-                this.txtStats.Dispatcher.Invoke(() =>
+                // Plots 
+                RunOnGUIThread(() =>
                 {
-                    this.txtStats.Text += $"Plots found: {sNetlist.Plots.Count}\n";
+                    AppendStats($"Plots found: {sNetlist.Plots.Count}");
                 });
 
                 if (sNetlist.Plots.Count > 0)
@@ -112,8 +110,8 @@ namespace SpiceSharp.Runner.Windows
                     foreach (var plot in sNetlist.Plots)
                     {
                         bool positive = SpiceHelper.IsPlotPositive(plot);
-                        
-                        this.PlotsTabs.Dispatcher.Invoke(() =>
+
+                        RunOnGUIThread(() =>
                         {
                             this.PlotsTab.IsEnabled = true;
                             PlotControl control = new PlotControl(plot, positive);
@@ -125,40 +123,73 @@ namespace SpiceSharp.Runner.Windows
                     }
                 }
 
+                // Warnings
                 foreach (var warning in sNetlist.Warnings)
                 {
-                    this.LogsTab.Dispatcher.Invoke(() =>
+                    RunOnGUIThread(() =>
                     {
                         txtLogs.Text += ("Warning: " + warning + "\n");
                     });
                 }
-
                 mainWatch.Stop();
 
-                this.txtStats.Dispatcher.Invoke(() =>
+                // Successfull finish
+                RunOnGUIThread(() =>
                 {
                     this.LogsTab.IsEnabled = true;
                     this.lblStatus.Text = "Status: Finished";
-                    this.txtStats.Text += $"---\nFinished executing netlist in {mainWatch.ElapsedMilliseconds} ms\n";
+                    AppendStats($"---\nFinished executing netlist in {mainWatch.ElapsedMilliseconds} ms");
                 });
 
             }
             catch (Exception ex)
             {
-                this.txtLogs.Dispatcher.Invoke(() =>
+                // Error finish
+                RunOnGUIThread(() =>
                 {
                     txtLogs.Text += "Exception occurred: " + ex.ToString();
-
-                });
-
-                this.txtStats.Dispatcher.Invoke(() =>
-                {
                     this.lblStatus.Text = "Status: Error (see 'Logs' tab)";
-                    this.txtStats.Text += $"---\nFinished executing netlist in {mainWatch.ElapsedMilliseconds} ms\n";
+                    AppendStats($"---\nFinished executing netlist in {mainWatch.ElapsedMilliseconds} ms");
                     this.LogsTab.IsSelected = true;
                     this.LogsTab.IsEnabled = true;
                 });
             }
+        }
+
+        private void RunSimulation(Stopwatch secondaryWatch, SpiceNetlist.SpiceSharpConnector.Netlist sNetlist, Simulations.BaseSimulation simulation)
+        {
+            secondaryWatch.Reset();
+            secondaryWatch.Start();
+            simulation.Run(sNetlist.Circuit);
+            secondaryWatch.Stop();
+
+            RunOnGUIThread(() =>
+            {
+                AppendStats("---");
+                AppendStats($"Finished executing simulation {simulation.Name} ({simulation.GetType()}) in {secondaryWatch.ElapsedMilliseconds} ms");
+
+                AppendStats($"Number of itrations: {simulation.Statistics.Iterations}");
+                AppendStats($"Solve time: {simulation.Statistics.SolveTime.ElapsedMilliseconds} ms");
+                AppendStats($"Load time: {simulation.Statistics.LoadTime.ElapsedMilliseconds} ms");
+                AppendStats($"Reorder time: {simulation.Statistics.ReorderTime.ElapsedMilliseconds} ms");
+                AppendStats($"Behavior creation time: {simulation.Statistics.BehaviorCreationTime.ElapsedMilliseconds} ms");
+                AppendStats($"Timepoints calculated: {simulation.Statistics.TimePoints}");
+                AppendStats($"Transient iterations: {simulation.Statistics.TransientIterations}");
+                AppendStats($"Transient time: {simulation.Statistics.TransientTime.ElapsedMilliseconds} ms");
+                AppendStats($"Accepted timepoints: {simulation.Statistics.Accepted}");
+                AppendStats($"Rejected timepoints: {simulation.Statistics.Rejected}");
+                AppendStats("---");
+            });
+        }
+
+        private void RunOnGUIThread(Action action)
+        {
+            this.Dispatcher.Invoke(() => action());
+        }
+
+        private void AppendStats(string text)
+        {
+            this.txtStats.Text += (text + "\n");
         }
     }
 }

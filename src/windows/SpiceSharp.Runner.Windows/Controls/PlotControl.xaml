@@ -7,11 +7,11 @@
              xmlns:oxy="http://oxyplot.org/wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel>
+    <DockPanel Background="White">
         <Label DockPanel.Dock="Top" Content="Options" />
         <CheckBox Name="x" Content="X-axis Log scale" Height="20" DockPanel.Dock="Top" Click="CheckBox_Click" />
         <CheckBox Name="y" Content="Y-axis Log scale" Height="20" DockPanel.Dock="Top" Click="CheckBox_Click_1"/>
-        <Button Name="save" Content="Save" DockPanel.Dock="Bottom" Click="save_Click"/>
+        <Button Name="save" Content="Save plot" DockPanel.Dock="Bottom" Click="save_Click"/>
         <oxy:PlotView Name="plot" Model="{Binding Model}" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" />
     </DockPanel>
 </UserControl>

@@ -5,9 +5,18 @@ using SpiceNetlist.SpiceSharpConnector.Processors.Controls.Plots;
 
 namespace SpiceSharp.Runner.Windows
 {
+    /// <summary>
+    /// Plot view model
+    /// </summary>
     public class PlotViewModel
     {
-        public PlotViewModel(Plot plot, bool xLog= false, bool yLog = false)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlotViewModel"/> class.
+        /// </summary>
+        /// <param name="plot"></param>
+        /// <param name="xLog"></param>
+        /// <param name="yLog"></param>
+        public PlotViewModel(Plot plot, bool xLog = false, bool yLog = false)
         {
             Model = CreateOxyPlotModel(plot, xLog, yLog);
         }
@@ -17,6 +26,13 @@ namespace SpiceSharp.Runner.Windows
         /// </summary>
         public PlotModel Model { get; private set; }
 
+        /// <summary>
+        /// Creates Oxyplot library plot model
+        /// </summary>
+        /// <param name="plot">Plot data</param>
+        /// <param name="xLog">Specifies whether x-axis is logaritmic</param>
+        /// <param name="yLog">Specifies whether y-axis is logaritmic</param>
+        /// <returns></returns>
         private static PlotModel CreateOxyPlotModel(Plot plot, bool xLog, bool yLog)
         {
             var tmp = new PlotModel { Title = plot.Name };

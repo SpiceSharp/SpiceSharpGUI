@@ -1,10 +1,8 @@
 ﻿using SpiceLexer;
 using SpiceNetlist.SpiceSharpConnector;
 using SpiceNetlist.SpiceSharpConnector.Processors.Controls.Plots;
-using SpiceParser;
 using SpiceParser.Parsing;
 using SpiceParser.Translation;
-using System;
 using System.Linq;
 
 namespace SpiceSharp.Runner.Windows
@@ -29,12 +27,11 @@ namespace SpiceSharp.Runner.Windows
             return translator.Evaluate(root) as SpiceNetlist.Netlist;
         }
 
-        public static SpiceNetlist.SpiceSharpConnector.Netlist GetSpiceSharpNetlist(SpiceNetlist.Netlist netlist)
+        public static Netlist GetSpiceSharpNetlist(SpiceNetlist.Netlist netlist)
         {
             var connector = new Connector();
             return connector.Translate(netlist);
         }
-        
 
         public static bool IsPlotPositive(Plot plot)
         {
