@@ -18,7 +18,7 @@
                         <avalonEdit:TextEditor
                             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                             Name="txtNetlist"
-                            IsEnabled="False"
+                            IsReadOnly="true"
                             ShowLineNumbers="True"
                             FontFamily="Consolas"
                             FontSize="10pt"/>

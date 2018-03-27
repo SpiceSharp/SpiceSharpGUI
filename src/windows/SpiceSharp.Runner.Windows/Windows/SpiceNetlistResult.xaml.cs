@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Circuits;
+﻿using ICSharpCode.AvalonEdit.Search;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Runner.Windows.Controls;
 using SpiceSharp.Simulations;
@@ -18,6 +19,8 @@ namespace SpiceSharp.Runner.Windows
         public SpiceNetlistResult()
         {
             InitializeComponent();
+
+            SearchPanel.Install(txtNetlist);
         }
        
         public SpiceNetlistResult(string netlist) : this()
