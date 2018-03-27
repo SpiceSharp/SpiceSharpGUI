@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using ICSharpCode.AvalonEdit.Search;
+using Microsoft.Win32;
 using System.IO;
 using System.Windows;
 
@@ -12,6 +13,8 @@ namespace SpiceSharp.Runner.Windows
         public MainWindow()
         {
             InitializeComponent();
+
+            SearchPanel.Install(txtEditor);
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
