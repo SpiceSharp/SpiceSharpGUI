@@ -21,9 +21,12 @@
             </StatusBarItem>
         </StatusBar>
         <DockPanel Height="Auto" Name="stackPanel2" Width="Auto" >
-            <ScrollViewer>
-                <TextBox Name="txtEditor" AcceptsReturn="True" />
-            </ScrollViewer>
+                <avalonEdit:TextEditor
+                    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                    Name="txtEditor"
+                    ShowLineNumbers="True"
+                    FontFamily="Consolas"
+                    FontSize="10pt"/>
         </DockPanel>
     </DockPanel>
 

@@ -15,9 +15,13 @@
         <TabControl Name="Tabs" DockPanel.Dock="Top">
             <TabItem Header="Netlist">
                 <DockPanel Height="Auto" Name="NetlistPanel" Width="Auto" >
-                    <ScrollViewer>
-                        <TextBox Name="txtNetlist" IsEnabled="False" AcceptsReturn="True" />
-                    </ScrollViewer>
+                        <avalonEdit:TextEditor
+                            xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                            Name="txtNetlist"
+                            IsEnabled="False"
+                            ShowLineNumbers="True"
+                            FontFamily="Consolas"
+                            FontSize="10pt"/>
                 </DockPanel>
             </TabItem>
             <TabItem Header="Internals" Name="CircuitElementsPanelTab">
