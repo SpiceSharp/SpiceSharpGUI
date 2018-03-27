@@ -47,29 +47,12 @@
     <Reference Include="OxyPlot.Wpf, Version=2.0.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Wpf.2.0.0-unstable1035\lib\net452\OxyPlot.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="SpiceGrammar, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\SpiceGrammar.dll</HintPath>
-    </Reference>
-    <Reference Include="SpiceLexer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\SpiceLexer.dll</HintPath>
-    </Reference>
-    <Reference Include="SpiceNetlist, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\SpiceNetlist.dll</HintPath>
-    </Reference>
-    <Reference Include="SpiceNetlist.SpiceSharpConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\SpiceNetlist.SpiceSharpConnector.dll</HintPath>
-    </Reference>
-    <Reference Include="SpiceParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\SpiceParser.dll</HintPath>
-    </Reference>
     <Reference Include="SpiceSharp, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\SpiceSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SpiceSharpParser">
+      <HintPath>..\..\..\libs\SpiceSharpParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

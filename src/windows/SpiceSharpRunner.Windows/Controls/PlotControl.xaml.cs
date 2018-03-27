@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
-using SpiceNetlist.SpiceSharpConnector.Processors.Controls.Plots;
+using SpiceSharpParser.Connector.Processors.Controls.Plots;
+using SpiceSharpRunner.Windows.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SpiceSharp.Runner.Windows.Controls
+namespace SpiceSharpRunner.Windows.Controls
 {
     /// <summary>
     /// Interaction logic for PlotControl.xaml

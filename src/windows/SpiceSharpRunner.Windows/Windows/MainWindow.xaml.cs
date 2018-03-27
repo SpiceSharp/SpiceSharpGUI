@@ -3,7 +3,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Windows;
 
-namespace SpiceSharp.Runner.Windows
+namespace SpiceSharpRunner.Windows.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

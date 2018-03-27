@@ -1,9 +1,9 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using SpiceNetlist.SpiceSharpConnector.Processors.Controls.Plots;
+using SpiceSharpParser.Connector.Processors.Controls.Plots;
 
-namespace SpiceSharp.Runner.Windows
+namespace SpiceSharpRunner.Windows.Logic
 {
     /// <summary>
     /// Plot view model

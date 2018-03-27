@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharp.Runner.Windows", "SpiceSharp.Runner.Windows\SpiceSharp.Runner.Windows.csproj", "{1A786E30-E2F4-4C4C-AD9E-2D296D810BA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpRunner.Windows", "SpiceSharpRunner.Windows\SpiceSharpRunner.Windows.csproj", "{1A786E30-E2F4-4C4C-AD9E-2D296D810BA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

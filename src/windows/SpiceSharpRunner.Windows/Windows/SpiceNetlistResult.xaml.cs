@@ -1,15 +1,17 @@
 ﻿using ICSharpCode.AvalonEdit.Search;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Runner.Windows.Controls;
 using SpiceSharp.Simulations;
+using SpiceSharpParser.Connector;
+using SpiceSharpRunner.Windows.Controls;
+using SpiceSharpRunner.Windows.Logic;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace SpiceSharp.Runner.Windows
+namespace SpiceSharpRunner.Windows.Windows
 {
     /// <summary>
     /// Spice netlist run result window
@@ -162,7 +164,7 @@ namespace SpiceSharp.Runner.Windows
             }
         }
 
-        private void RunSimulation(Stopwatch secondaryWatch, SpiceNetlist.SpiceSharpConnector.Netlist sNetlist, Simulations.BaseSimulation simulation)
+        private void RunSimulation(Stopwatch secondaryWatch, Netlist sNetlist, BaseSimulation simulation)
         {
             secondaryWatch.Reset();
             secondaryWatch.Start();

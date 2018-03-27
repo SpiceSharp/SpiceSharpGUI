@@ -1,33 +1,33 @@
-﻿using SpiceLexer;
-using SpiceNetlist.SpiceSharpConnector;
-using SpiceNetlist.SpiceSharpConnector.Processors.Controls.Plots;
-using SpiceParser.Parsing;
-using SpiceParser.Translation;
+﻿using SpiceSharpParser.Connector;
+using SpiceSharpParser.Connector.Processors.Controls.Plots;
+using SpiceSharpParser.Parser.Parsing;
+using SpiceSharpParser.Parser.Translation;
+using SpiceSharpParser.SpiceLexer;
 using System.Linq;
 
-namespace SpiceSharp.Runner.Windows
+namespace SpiceSharpRunner.Windows.Logic
 {
     public class SpiceHelper
     {
         public static SpiceToken[] GetTokens(string text)
         {
-            var lexer = new SpiceLexer.SpiceLexer(new SpiceLexerOptions { HasTitle = true });
+            var lexer = new SpiceLexer(new SpiceLexerOptions { HasTitle = true });
             var tokensEnumerable = lexer.GetTokens(text);
             return tokensEnumerable.ToArray();
         }
 
         public static ParseTreeNonTerminalNode GetParseTree(SpiceToken[] tokens)
         {
-            return new SpiceParser.Parsing.Parser().GetParseTree(tokens); 
+            return new SpiceSharpParser.Parser.Parsing.Parser().GetParseTree(tokens); 
         }
 
-        public static SpiceNetlist.Netlist GetNetlist(ParseTreeNonTerminalNode root)
+        public static SpiceSharpParser.Model.Netlist GetNetlist(ParseTreeNonTerminalNode root)
         {
             var translator = new ParseTreeTranslator();
-            return translator.Evaluate(root) as SpiceNetlist.Netlist;
+            return translator.Evaluate(root) as SpiceSharpParser.Model.Netlist;
         }
 
-        public static Netlist GetSpiceSharpNetlist(SpiceNetlist.Netlist netlist)
+        public static Netlist GetSpiceSharpNetlist(SpiceSharpParser.Model.Netlist netlist)
         {
             var connector = new Connector();
             return connector.Translate(netlist);
