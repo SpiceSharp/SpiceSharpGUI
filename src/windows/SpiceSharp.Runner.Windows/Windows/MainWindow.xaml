@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpiceSharp.Runner.Windows"
         mc:Ignorable="d"
-        Title="SpiceNetlist runner (Spice#)" Height="350" Width="525">
+        Title="SpiceSharp-Runner: Main window" Height="350" Width="525">
     <DockPanel Height="Auto" Name="stackPanel1" Width="Auto" LastChildFill="True">
         <Menu IsMainMenu="True" DockPanel.Dock="Top">
             <MenuItem Header="_File">
