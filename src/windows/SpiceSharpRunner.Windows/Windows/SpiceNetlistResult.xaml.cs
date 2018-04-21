@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpParser.Connector;
+using SpiceSharpParser.Model;
 using SpiceSharpRunner.Windows.Controls;
 using SpiceSharpRunner.Windows.Logic;
 using System;
@@ -164,7 +165,7 @@ namespace SpiceSharpRunner.Windows.Windows
             }
         }
 
-        private void RunSimulation(Stopwatch secondaryWatch, Netlist sNetlist, BaseSimulation simulation)
+        private void RunSimulation(Stopwatch secondaryWatch, ConnectorResult connectorResult, BaseSimulation simulation)
         {
             secondaryWatch.Reset();
             secondaryWatch.Start();
@@ -177,7 +178,7 @@ namespace SpiceSharpRunner.Windows.Windows
                     TreeViewItem objects = new TreeViewItem() { Header = "Objects" };
                     simulationItem.Items.Add(objects);
 
-                    var enumerator = sNetlist.Circuit.Objects.GetEnumerator();
+                    var enumerator = connectorResult.Circuit.Objects.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
                         var entity = enumerator.Current;
@@ -208,7 +209,7 @@ namespace SpiceSharpRunner.Windows.Windows
                     this.CircuitElementsTreeView.Items.Add(simulationItem);
                 });
             };
-            simulation.Run(sNetlist.Circuit);
+            simulation.Run(connectorResult.Circuit);
             secondaryWatch.Stop();
 
             // Stats

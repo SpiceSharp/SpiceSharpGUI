@@ -1,8 +1,8 @@
 ﻿using SpiceSharpParser.Connector;
 using SpiceSharpParser.Connector.Processors.Controls.Plots;
-using SpiceSharpParser.Parser.Parsing;
-using SpiceSharpParser.Parser.Translation;
-using SpiceSharpParser.SpiceLexer;
+using SpiceSharpParser.Lexer.Spice3f5;
+using SpiceSharpParser.Parser.TreeGeneration;
+using SpiceSharpParser.Parser.TreeTranslator;
 using System.Linq;
 
 namespace SpiceSharpRunner.Windows.Logic
@@ -18,7 +18,7 @@ namespace SpiceSharpRunner.Windows.Logic
 
         public static ParseTreeNonTerminalNode GetParseTree(SpiceToken[] tokens)
         {
-            return new SpiceSharpParser.Parser.Parsing.Parser().GetParseTree(tokens); 
+            return new ParserTreeGenerator().GetParseTree(tokens); 
         }
 
         public static SpiceSharpParser.Model.Netlist GetNetlist(ParseTreeNonTerminalNode root)
@@ -27,7 +27,7 @@ namespace SpiceSharpRunner.Windows.Logic
             return translator.Evaluate(root) as SpiceSharpParser.Model.Netlist;
         }
 
-        public static Netlist GetSpiceSharpNetlist(SpiceSharpParser.Model.Netlist netlist)
+        public static ConnectorResult GetSpiceSharpNetlist(SpiceSharpParser.Model.Netlist netlist)
         {
             var connector = new Connector();
             return connector.Translate(netlist);
