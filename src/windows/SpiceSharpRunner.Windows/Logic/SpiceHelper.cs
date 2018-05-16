@@ -27,7 +27,7 @@ namespace SpiceSharpRunner.Windows.Logic
             return translator.Evaluate(root) as SpiceSharpParser.Model.Netlist;
         }
 
-        public static ConnectorResult GetSpiceSharpNetlist(SpiceSharpParser.Model.Netlist netlist)
+        public static SpiceSharpModel GetSpiceSharpNetlist(SpiceSharpParser.Model.Netlist netlist)
         {
             var connector = new Connector();
             return connector.Translate(netlist);

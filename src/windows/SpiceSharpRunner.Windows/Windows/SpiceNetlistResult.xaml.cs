@@ -165,7 +165,7 @@ namespace SpiceSharpRunner.Windows.Windows
             }
         }
 
-        private void RunSimulation(Stopwatch secondaryWatch, ConnectorResult connectorResult, BaseSimulation simulation)
+        private void RunSimulation(Stopwatch secondaryWatch, SpiceSharpModel connectorResult, BaseSimulation simulation)
         {
             secondaryWatch.Reset();
             secondaryWatch.Start();
