@@ -1,9 +1,7 @@
 ﻿using ICSharpCode.AvalonEdit.Search;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharpParser.Connector;
-using SpiceSharpParser.Model;
+using SpiceSharpParser.ModelReader.Netlist.Spice;
 using SpiceSharpRunner.Windows.Controls;
 using SpiceSharpRunner.Windows.Logic;
 using System;
@@ -54,39 +52,10 @@ namespace SpiceSharpRunner.Windows.Windows
             {
                 mainWatch.Start();
 
-                // Tokenization generation
-                secondaryWatch.Start();
-                var tokens = SpiceHelper.GetTokens(Netlist);
-                secondaryWatch.Stop();
-                RunOnGUIThread(() =>
-                {
-                   AppendStats($"Tokenization time: { secondaryWatch.ElapsedMilliseconds} ms");
-                });
-    
-                // Parse tree generation
+                // Reading netlist 
                 secondaryWatch.Reset();
                 secondaryWatch.Start();
-                var parseTree = SpiceHelper.GetParseTree(tokens);
-                secondaryWatch.Stop();
-                RunOnGUIThread(() =>
-                {
-                    AppendStats($"Parse tree generation time: { secondaryWatch.ElapsedMilliseconds} ms");
-                });
-
-                // Netlist object model generation
-                secondaryWatch.Reset();
-                secondaryWatch.Start();
-                var netlist = SpiceHelper.GetNetlist(parseTree);
-                secondaryWatch.Stop();
-                RunOnGUIThread(() =>
-                {
-                    AppendStats($"Netlist object model generation time: { secondaryWatch.ElapsedMilliseconds} ms");
-                });
-
-                // Translating Netlist object model to Spice# 
-                secondaryWatch.Reset();
-                secondaryWatch.Start();
-                var sNetlist = SpiceHelper.GetSpiceSharpNetlist(netlist);
+                var spiceSharpModel = SpiceHelper.GetSpiceSharpNetlist(Netlist);
                 secondaryWatch.Stop();
 
                 RunOnGUIThread(() =>
@@ -98,25 +67,25 @@ namespace SpiceSharpRunner.Windows.Windows
                 RunOnGUIThread(() =>
                 {
                     AppendStats($"---");
-                    AppendStats($"Simulations found: {sNetlist.Simulations.Count}");
+                    AppendStats($"Simulations found: {spiceSharpModel.Simulations.Count}");
                 });
 
                 // Simulation run
-                foreach (BaseSimulation simulation in sNetlist.Simulations)
+                foreach (BaseSimulation simulation in spiceSharpModel.Simulations)
                 {
-                    RunSimulation(secondaryWatch, sNetlist, simulation);                    
+                    RunSimulation(secondaryWatch, spiceSharpModel, simulation);                    
                 }
 
 
                 // Plots 
                 RunOnGUIThread(() =>
                 {
-                    AppendStats($"Plots found: {sNetlist.Plots.Count}");
+                    AppendStats($"Plots found: {spiceSharpModel.Plots.Count}");
                 });
 
-                if (sNetlist.Plots.Count > 0)
+                if (spiceSharpModel.Plots.Count > 0)
                 {
-                    foreach (var plot in sNetlist.Plots)
+                    foreach (var plot in spiceSharpModel.Plots)
                     {
                         bool positive = SpiceHelper.IsPlotPositive(plot);
 
@@ -133,7 +102,7 @@ namespace SpiceSharpRunner.Windows.Windows
                 }
 
                 // Warnings
-                foreach (var warning in sNetlist.Warnings)
+                foreach (var warning in spiceSharpModel.Warnings)
                 {
                     RunOnGUIThread(() =>
                     {
@@ -165,7 +134,7 @@ namespace SpiceSharpRunner.Windows.Windows
             }
         }
 
-        private void RunSimulation(Stopwatch secondaryWatch, SpiceSharpModel connectorResult, BaseSimulation simulation)
+        private void RunSimulation(Stopwatch secondaryWatch, SpiceModelReaderResult connectorResult, BaseSimulation simulation)
         {
             secondaryWatch.Reset();
             secondaryWatch.Start();

@@ -1,36 +1,24 @@
-﻿using SpiceSharpParser.Connector;
-using SpiceSharpParser.Connector.Processors.Controls.Plots;
-using SpiceSharpParser.Lexer.Spice3f5;
-using SpiceSharpParser.Parser.TreeGeneration;
-using SpiceSharpParser.Parser.TreeTranslator;
-using System.Linq;
+﻿using SpiceSharpParser.ModelReader.Netlist.Spice;
+using SpiceSharpParser.ModelReader.Netlist.Spice.Processors.Controls.Plots;
+using System;
 
 namespace SpiceSharpRunner.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceToken[] GetTokens(string text)
+        public static SpiceModelReaderResult GetSpiceSharpNetlist(string netlist)
         {
-            var lexer = new SpiceLexer(new SpiceLexerOptions { HasTitle = true });
-            var tokensEnumerable = lexer.GetTokens(text);
-            return tokensEnumerable.ToArray();
-        }
+            SpiceSharpParser.ParserFacade facade = new SpiceSharpParser.ParserFacade();
 
-        public static ParseTreeNonTerminalNode GetParseTree(SpiceToken[] tokens)
-        {
-            return new ParserTreeGenerator().GetParseTree(tokens); 
-        }
+            var settings = new SpiceSharpParser.ParserSettings();
+            settings.SpiceNetlistParserSettings.HasTitle = true;
+            settings.SpiceNetlistParserSettings.IsNewlineRequired = true;
+            settings.SpiceNetlistParserSettings.IsEndRequired = false;
 
-        public static SpiceSharpParser.Model.Netlist GetNetlist(ParseTreeNonTerminalNode root)
-        {
-            var translator = new ParseTreeTranslator();
-            return translator.Evaluate(root) as SpiceSharpParser.Model.Netlist;
-        }
+            settings.SpiceModelReaderSettings.EvaluatorMode = SpiceSharpParser.ModelReader.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode.Spice3f5;
+            var parserResult = facade.ParseNetlist(netlist, settings, Environment.CurrentDirectory);
 
-        public static SpiceSharpModel GetSpiceSharpNetlist(SpiceSharpParser.Model.Netlist netlist)
-        {
-            var connector = new Connector();
-            return connector.Translate(netlist);
+            return parserResult.ReaderResult;
         }
 
         public static bool IsPlotPositive(Plot plot)

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using SpiceSharpParser.Connector.Processors.Controls.Plots;
+using SpiceSharpParser.ModelReader.Netlist.Spice.Processors.Controls.Plots;
 using SpiceSharpRunner.Windows.Logic;
 using System;
 using System.Collections.Generic;

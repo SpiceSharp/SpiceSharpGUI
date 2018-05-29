@@ -11,6 +11,7 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_Open" Click="Open_Click" />
                 <MenuItem Header="_Save" Click="Save_Click" />
+                <MenuItem Header="_Set Working Directory" Click="SetWorkingDirectory_Click" />
                 <MenuItem Header="_Exit" Click="Exit_Click" />
             </MenuItem>
             <MenuItem Header="_Run" Click="Run_Click"/>

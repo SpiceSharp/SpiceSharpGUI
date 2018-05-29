@@ -50,11 +50,12 @@
     <Reference Include="SpiceSharp, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SpiceSharp.2.1.2\lib\net45\SpiceSharp.dll</HintPath>
     </Reference>
-    <Reference Include="SpiceSharpParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpiceSharp-Parser.1.0.0-rc\lib\net45\SpiceSharpParser.dll</HintPath>
+    <Reference Include="SpiceSharpParser, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpiceSharp-Parser.1.0.1-rc\lib\net45\SpiceSharpParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
