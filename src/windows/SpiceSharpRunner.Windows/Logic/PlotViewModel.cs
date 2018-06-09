@@ -1,7 +1,7 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using SpiceSharpParser.ModelReader.Netlist.Spice.Processors.Controls.Plots;
+using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
 
 namespace SpiceSharpRunner.Windows.Logic
 {
@@ -16,15 +16,17 @@ namespace SpiceSharpRunner.Windows.Logic
         /// <param name="plot"></param>
         /// <param name="xLog"></param>
         /// <param name="yLog"></param>
-        public PlotViewModel(Plot plot, bool xLog = false, bool yLog = false)
+        public PlotViewModel(Plot plot, bool xLog = false, bool yLog = false, bool legendVisible = false)
         {
-            Model = CreateOxyPlotModel(plot, xLog, yLog);
+            OxyPlotModel = CreateOxyPlotModel(plot, xLog, yLog);
+            OxyPlotModel.IsLegendVisible = legendVisible;
+            OxyPlotModel.LegendPosition = LegendPosition.BottomRight;
         }
 
         /// <summary>
         /// Gets the plot model.
         /// </summary>
-        public PlotModel Model { get; private set; }
+        public PlotModel OxyPlotModel { get; private set; }
 
         /// <summary>
         /// Creates Oxyplot library plot model
@@ -52,44 +54,34 @@ namespace SpiceSharpRunner.Windows.Logic
                 }
                 else
                 {
-                    var series = new ScatterSeries { Title = plot.Series[i].Name, MarkerType = MarkerType.Cross };
-                    var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle };
+                    var scatterSeries = new ScatterSeries { Title = plot.Series[i].Name, MarkerSize = 3, SelectionMode = SelectionMode.Single, MarkerType = MarkerType.Circle };
                     scatterSeries.Points.Add(new ScatterPoint(plot.Series[i].Points[0].X, plot.Series[i].Points[0].Y));
                     tmp.Series.Add(scatterSeries);
                 }
             }
 
-            string xUnit = null;
-            string yUnit = null;
-            if (plot.Series.Count == 1)
+            if (plot.Series.Count > 0)
             {
-                xUnit = plot.Series[0].XUnit;
-                yUnit = plot.Series[0].YUnit;
-            }
-            else
-            {
-                for (var i = 0; i < tmp.Series.Count; i++)
+                string xUnit = plot.Series[0].XUnit;
+                string yUnit = plot.Series[0].YUnit;
+
+                if (xLog)
                 {
-                    tmp.Series[i].Title += plot.Series[i].YUnit;
+                    tmp.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Bottom, Unit = xUnit });
                 }
-            }
+                else
+                {
+                    tmp.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Unit = xUnit });
+                }
 
-            if (xLog)
-            {
-                tmp.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Bottom, Unit = xUnit });
-            }
-            else
-            {
-                tmp.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Unit = xUnit });
-            }
-
-            if (yLog)
-            {
-                tmp.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Left, Unit = yUnit });
-            }
-            else
-            {
-                tmp.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Unit = yUnit });
+                if (yLog)
+                {
+                    tmp.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Left, Unit = yUnit });
+                }
+                else
+                {
+                    tmp.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Unit = yUnit });
+                }
             }
 
             return tmp;

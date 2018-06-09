@@ -1,7 +1,8 @@
 ﻿using ICSharpCode.AvalonEdit.Search;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharpParser.ModelReader.Netlist.Spice;
+using SpiceSharpParser.ModelReaders.Netlist.Spice;
+using SpiceSharpParser.ModelsReaders.Netlist.Spice;
 using SpiceSharpRunner.Windows.Controls;
 using SpiceSharpRunner.Windows.Logic;
 using System;
@@ -134,7 +135,7 @@ namespace SpiceSharpRunner.Windows.Windows
             }
         }
 
-        private void RunSimulation(Stopwatch secondaryWatch, SpiceModelReaderResult connectorResult, BaseSimulation simulation)
+        private void RunSimulation(Stopwatch secondaryWatch, SpiceNetlistReaderResult connectorResult, BaseSimulation simulation)
         {
             secondaryWatch.Reset();
             secondaryWatch.Start();
@@ -173,6 +174,15 @@ namespace SpiceSharpRunner.Windows.Windows
                     {
                         TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", variable.Name, variable.UnknownType)};
                         variables.Items.Add(item);
+                    }
+
+                    TreeViewItem parameters = new TreeViewItem() { Header = "Parameters" };
+                    simulationItem.Items.Add(parameters);
+
+                    foreach (var parameter in connectorResult.Evaluator.GetParameterNames())
+                    {
+                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter,  connectorResult.Evaluator.GetParameterValue(parameter, simulation))};
+                        parameters.Items.Add(item);
                     }
 
                     this.CircuitElementsTreeView.Items.Add(simulationItem);

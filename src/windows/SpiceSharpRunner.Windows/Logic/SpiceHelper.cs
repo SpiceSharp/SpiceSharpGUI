@@ -1,12 +1,13 @@
-﻿using SpiceSharpParser.ModelReader.Netlist.Spice;
-using SpiceSharpParser.ModelReader.Netlist.Spice.Processors.Controls.Plots;
+﻿using SpiceSharpParser.ModelsReaders.Netlist.Spice;
+using SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions;
+using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
 using System;
 
 namespace SpiceSharpRunner.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceModelReaderResult GetSpiceSharpNetlist(string netlist)
+        public static SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist)
         {
             SpiceSharpParser.ParserFacade facade = new SpiceSharpParser.ParserFacade();
 
@@ -15,8 +16,9 @@ namespace SpiceSharpRunner.Windows.Logic
             settings.SpiceNetlistParserSettings.IsNewlineRequired = true;
             settings.SpiceNetlistParserSettings.IsEndRequired = false;
 
-            settings.SpiceModelReaderSettings.EvaluatorMode = SpiceSharpParser.ModelReader.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode.Spice3f5;
-            var parserResult = facade.ParseNetlist(netlist, settings, Environment.CurrentDirectory);
+            settings.SpiceNetlistModelReaderSettings.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;
+            settings.WorkingDirectoryPath = Environment.CurrentDirectory;
+            var parserResult = facade.ParseNetlist(netlist, settings);
 
             return parserResult.ReaderResult;
         }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using SpiceSharpParser.ModelReader.Netlist.Spice.Processors.Controls.Plots;
+using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Logic;
 using System;
 using System.Collections.Generic;
@@ -39,14 +39,20 @@ namespace SpiceSharpRunner.Windows.Controls
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value);
+            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value, this.legend.IsChecked.Value);
             this.DataContext = model;
 
         }
 
         private void CheckBox_Click_1(object sender, RoutedEventArgs e)
         {
-            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value);
+            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value, this.legend.IsChecked.Value);
+            this.DataContext = model;
+        }
+
+        private void CheckBox_Click_3(object sender, RoutedEventArgs e)
+        {
+            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value, this.legend.IsChecked.Value);
             this.DataContext = model;
         }
 

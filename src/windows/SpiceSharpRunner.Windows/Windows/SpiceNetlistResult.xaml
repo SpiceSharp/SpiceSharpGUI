@@ -32,7 +32,7 @@
             </TabItem>
             <TabItem Name="LogsTab" Header="Logs">
                 <DockPanel Height="Auto" Name="WarningsPanel" Width="Auto" >
-                    <TextBox Name="txtLogs" IsEnabled="False" AcceptsReturn="True" />
+                    <TextBox Name="txtLogs" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" AcceptsReturn="True" />
                 </DockPanel>
             </TabItem>
             <TabItem Header="Plots" Name="PlotsTab">
@@ -41,7 +41,7 @@
             </TabItem>
             <TabItem Header="Stats">
                 <DockPanel Height="Auto" Name="StatsPanel" Width="Auto" >
-                    <TextBox Name="txtStats" IsEnabled="False" AcceptsReturn="True" />
+                    <TextBox Name="txtStats" ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True" AcceptsReturn="True" />
                 </DockPanel>
             </TabItem>
         </TabControl>
