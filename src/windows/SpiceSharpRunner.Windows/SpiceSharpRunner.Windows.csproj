@@ -77,11 +77,25 @@
     <Compile Include="Controls\PlotControl.xaml.cs">
       <DependentUpon>PlotControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PrintControl.xaml.cs">
+      <DependentUpon>PrintControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Logic\SpiceHelper.cs" />
+    <Compile Include="Windows\CsvExport.xaml.cs">
+      <DependentUpon>CsvExport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SpiceNetlistResult.xaml.cs">
       <DependentUpon>SpiceNetlistResult.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\PlotControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PrintControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CsvExport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

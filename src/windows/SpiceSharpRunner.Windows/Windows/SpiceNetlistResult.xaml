@@ -1,4 +1,4 @@
-﻿<Window x:Class="SpiceSharpRunner.Windows.Windows.SpiceNetlistResult"
+﻿<Window xmlns:Controls="clr-namespace:SpiceSharp.Runner.Windows.Controls"  x:Class="SpiceSharpRunner.Windows.Windows.SpiceNetlistResult"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -34,6 +34,12 @@
                 <DockPanel Height="Auto" Name="WarningsPanel" Width="Auto" >
                     <TextBox Name="txtLogs" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" AcceptsReturn="True" />
                 </DockPanel>
+            </TabItem>
+            <TabItem Name="PrintsTab" Header="Prints">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Height="Auto" Name="PrintsPanel" Width="Auto">
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Plots" Name="PlotsTab">
                 <TabControl DockPanel.Dock="Top" Name="PlotsTabs">

@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit.Search;
 using SpiceSharp.Components;
+using SpiceSharp.Runner.Windows.Controls;
 using SpiceSharp.Simulations;
 using SpiceSharpParser.ModelReaders.Netlist.Spice;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice;
@@ -93,11 +94,31 @@ namespace SpiceSharpRunner.Windows.Windows
                         RunOnGUIThread(() =>
                         {
                             this.PlotsTab.IsEnabled = true;
-                            PlotControl control = new PlotControl(plot, positive);
+                            Controls.PlotControl control = new Controls.PlotControl(plot, positive);
 
                             var item = new TabItem() { Header = plot.Name };
                             item.Content = control;
                             this.PlotsTabs.Items.Add(item);
+                        });
+                    }
+                }
+
+                // Prints 
+                RunOnGUIThread(() =>
+                {
+                    AppendStats($"Prints found: {spiceSharpModel.Prints.Count}");
+                });
+
+                if (spiceSharpModel.Prints.Count > 0)
+                {
+                    foreach (var print in spiceSharpModel.Prints)
+                    {
+                        RunOnGUIThread(() =>
+                        {
+                            this.PrintsTab.IsEnabled = true;
+                            PrintControl control = new PrintControl(print);
+                            control.DataBind();
+                            this.PrintsPanel.Children.Add(control);
                         });
                     }
                 }
