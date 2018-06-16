@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace SpiceSharpRunner.Windows.Windows
+namespace SpiceSharpRunner.Windows
 {
     /// <summary>
     /// MainWindow.

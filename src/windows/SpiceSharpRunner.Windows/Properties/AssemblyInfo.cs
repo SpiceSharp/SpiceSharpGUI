@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SpiceNetlist.Runner")]
-[assembly: AssemblyDescription("Spice simulation environment for Windows using SpiceSharp and SpiceSharpParser. Used third-party libraries: AvalonEdit, MdiContainerWPF, OxyPlot")]
+[assembly: AssemblyDescription("Spice simulation environment for Windows built with SpiceSharp and SpiceSharpParser.\r\n\r\nUsed third-party libraries: AvalonEdit, MdiContainerWPF, OxyPlot")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SpiceSharp")]
 [assembly: AssemblyProduct("SpiceNetlist.Runner")]

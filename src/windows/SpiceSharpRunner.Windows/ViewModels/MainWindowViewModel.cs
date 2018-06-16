@@ -1,6 +1,5 @@
 ﻿using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.ViewModels;
-using SpiceSharpRunner.Windows.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

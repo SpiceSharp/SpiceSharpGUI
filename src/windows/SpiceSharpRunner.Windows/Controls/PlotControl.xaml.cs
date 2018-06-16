@@ -61,12 +61,13 @@ namespace SpiceSharpRunner.Windows.Controls
         {
             SaveFileDialog dialog = new SaveFileDialog()
             {
+                Filter = "BMP files (*.bmp)|*.bmp|All files (*.*)|*.*"
             };
 
             if (dialog.ShowDialog() == true)
             {
                 this.plot.SaveBitmap(dialog.FileName);
-                MessageBox.Show("Zapisano");
+                MessageBox.Show("Saved");
             }
         }
 

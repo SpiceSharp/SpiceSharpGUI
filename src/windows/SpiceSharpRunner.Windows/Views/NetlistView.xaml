@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpiceSharpRunner.Windows"
         mc:Ignorable="d"
-        d:DesignHeight="600" d:DesignWidth="600" MinWidth="600">
+        d:DesignHeight="600" d:DesignWidth="600">
         <DockPanel Height="Auto" Name="stackPanel1" Width="Auto" LastChildFill="True">
                 <avalonEdit:TextEditor
                             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"

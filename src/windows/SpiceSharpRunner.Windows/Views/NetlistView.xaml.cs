@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.ViewModels;
-using SpiceSharpRunner.Windows.Windows;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;

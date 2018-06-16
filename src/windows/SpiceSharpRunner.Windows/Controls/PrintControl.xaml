@@ -9,7 +9,7 @@
     <DockPanel Name="Panel" LastChildFill="True" Background="Gray">
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
             <Label Name="Title" DockPanel.Dock="Left"/>
-            <Button Content="Save to CSV" Width="30" DockPanel.Dock="Right" Margin="10"  Click="Button_Click" />
+            <Button Content="Save to CSV" Width="100" DockPanel.Dock="Right" Margin="10"  Click="Button_Click" />
         </DockPanel>
             <Grid>
                 <DataGrid

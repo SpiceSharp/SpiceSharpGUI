@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpiceSharpRunner.Windows.Views"
         mc:Ignorable="d"
-          d:DesignHeight="600" d:DesignWidth="600" MinWidth="600">
+        d:DesignHeight="600" d:DesignWidth="600">
     <DockPanel LastChildFill="True">
         <StatusBar Width="Auto" DockPanel.Dock="Bottom" Height="20">
             <StatusBarItem>
@@ -41,7 +41,7 @@
                 </DockPanel>
             </TabItem>
             <TabItem Name="PrintsTab" Header="Prints">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
                     <ItemsControl ItemsSource="{Binding Prints}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -83,9 +83,9 @@
                 </TabControl>
             </TabItem>
             <TabItem Header="Stats">
-                <DockPanel Height="Auto" Name="StatsPanel" Width="Auto" >
-                    <TextBox Name="txtStats" ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True" AcceptsReturn="True" Text="{Binding Stats}" />
-                </DockPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <TextBox Name="txtStats" IsReadOnly="True" AcceptsReturn="True" Text="{Binding Stats}" />
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </DockPanel>
