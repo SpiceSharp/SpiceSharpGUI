@@ -7,7 +7,7 @@
     <ProjectGuid>{1A786E30-E2F4-4C4C-AD9E-2D296D810BA2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>SpiceSharp.Runner.Windows</RootNamespace>
-    <AssemblyName>SpiceSharp.Runner.Windows</AssemblyName>
+    <AssemblyName>SpiceSharpRunner.Windows</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -38,6 +38,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hammer.MDIContainer.Control, Version=2.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MdiContainerWPF.2.8.4\lib\Hammer.MDIContainer.Control.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.5.0.4\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
@@ -50,11 +53,12 @@
     <Reference Include="SpiceSharp, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SpiceSharp.2.1.4\lib\net45\SpiceSharp.dll</HintPath>
     </Reference>
-    <Reference Include="SpiceSharpParser, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpiceSharp-Parser.1.0.1\lib\net45\SpiceSharpParser.dll</HintPath>
+    <Reference Include="SpiceSharpParser, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpiceSharp-Parser.1.0.2\lib\net45\SpiceSharpParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -74,6 +78,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\Command.cs" />
+    <Compile Include="Common\IContent.cs" />
+    <Compile Include="Common\ViewModelBase.cs" />
     <Compile Include="Controls\PlotControl.xaml.cs">
       <DependentUpon>PlotControl.xaml</DependentUpon>
     </Compile>
@@ -81,11 +88,23 @@
       <DependentUpon>PrintControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logic\SpiceHelper.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NetlistResultWindowViewModel.cs" />
+    <Compile Include="ViewModels\NetlistWindowViewModel.cs" />
+    <Compile Include="Windows\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CsvExport.xaml.cs">
       <DependentUpon>CsvExport.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SpiceNetlistResult.xaml.cs">
-      <DependentUpon>SpiceNetlistResult.xaml</DependentUpon>
+    <Compile Include="Views\NetlistResultView.xaml.cs">
+      <DependentUpon>NetlistResultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\PlotControl.xaml">
       <SubType>Designer</SubType>
@@ -99,7 +118,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\MainWindow.xaml">
+    <Page Include="Views\NetlistView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -107,17 +126,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="Views\NetlistView.xaml.cs">
+      <DependentUpon>NetlistView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Windows\SpiceNetlistResult.xaml">
+    <Page Include="Views\NetlistResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logic\PlotViewModel.cs" />
+    <Compile Include="ViewModels\PlotViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -134,6 +156,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

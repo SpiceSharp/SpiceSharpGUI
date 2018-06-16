@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SpiceSharp.Runner.Windows.Controls
+namespace SpiceSharpRunner.Windows.Controls
 {
     /// <summary>
     /// Interaction logic for PrintControl.xaml

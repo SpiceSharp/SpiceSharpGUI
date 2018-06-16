@@ -10,23 +10,31 @@ namespace SpiceSharpRunner.Windows.Logic
     /// </summary>
     public class PlotViewModel
     {
+        public bool yLogEnabled;
+
+        public Plot Plot { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PlotViewModel"/> class.
         /// </summary>
         /// <param name="plot"></param>
         /// <param name="xLog"></param>
         /// <param name="yLog"></param>
-        public PlotViewModel(Plot plot, bool xLog = false, bool yLog = false, bool legendVisible = false)
+        public PlotViewModel(Plot plot, bool xLog = false, bool yLog = false, bool legendVisible = false, bool yLogEnabled = true)
         {
+            Plot = plot;
             OxyPlotModel = CreateOxyPlotModel(plot, xLog, yLog);
             OxyPlotModel.IsLegendVisible = legendVisible;
             OxyPlotModel.LegendPosition = LegendPosition.BottomRight;
+            this.yLogEnabled = yLogEnabled;
         }
 
         /// <summary>
         /// Gets the plot model.
         /// </summary>
         public PlotModel OxyPlotModel { get; private set; }
+
+        public string Name {  get { return this.Plot.Name;  } }
 
         /// <summary>
         /// Creates Oxyplot library plot model

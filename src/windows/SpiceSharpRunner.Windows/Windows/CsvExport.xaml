@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpiceSharp.Runner.Windows.Windows"
         mc:Ignorable="d"
-        Title="CsvExport" Height="232.639" Width="381.25" Loaded="Window_Loaded">
+        Title="Csv export" Height="232.639" Width="381.25" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="131*"/>

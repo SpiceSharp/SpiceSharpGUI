@@ -41,6 +41,7 @@ namespace SpiceSharp.Runner.Windows.Windows
             {
                 Print.ToCsv(dialog.FileName, this.columns_seprator.Text, this.decimal_seprator.Text, this.header.IsChecked);
                 MessageBox.Show("Zapisano");
+                Close();
             }
         }
 

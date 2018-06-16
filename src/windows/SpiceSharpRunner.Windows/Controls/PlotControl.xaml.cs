@@ -1,20 +1,8 @@
 ﻿using Microsoft.Win32;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Logic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SpiceSharpRunner.Windows.Controls
 {
@@ -28,32 +16,45 @@ namespace SpiceSharpRunner.Windows.Controls
             InitializeComponent();
         }
 
-        public PlotControl(Plot plot, bool enableYLogAxis) : this()
+        public static readonly DependencyProperty PlotProperty = DependencyProperty.Register("Plot", typeof(Plot), typeof(PlotControl),
+                        new PropertyMetadata(OnPlotPropertyChanged));
+
+        public bool YEnabled { get; set; }
+
+        private static void OnPlotPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Plot = plot;
-            DataContext = new PlotViewModel(plot, false, false);
-            this.y.IsEnabled = enableYLogAxis;
+            ((PlotControl)d).Plot = e.NewValue as Plot;
+            ((PlotControl)d).DataBind();
         }
 
-        public Plot Plot { get; }
+        public Plot Plot
+        {
+            get { return GetValue(PlotProperty) as Plot; }
+            set
+            {
+                SetValue(PlotProperty, value);
+                DataBind();
+            }
+        }
+
+        private void PlotControl_Initialized(object sender, System.EventArgs e)
+        {
+            DataBind();
+        }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value, this.legend.IsChecked.Value);
-            this.DataContext = model;
-
+            DataBind();
         }
 
         private void CheckBox_Click_1(object sender, RoutedEventArgs e)
         {
-            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value, this.legend.IsChecked.Value);
-            this.DataContext = model;
+            DataBind();
         }
 
         private void CheckBox_Click_3(object sender, RoutedEventArgs e)
         {
-            PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value, this.legend.IsChecked.Value);
-            this.DataContext = model;
+            DataBind();
         }
 
         private void save_Click(object sender, RoutedEventArgs e)
@@ -66,6 +67,16 @@ namespace SpiceSharpRunner.Windows.Controls
             {
                 this.plot.SaveBitmap(dialog.FileName);
                 MessageBox.Show("Zapisano");
+            }
+        }
+
+        private void DataBind()
+        {
+            if (Plot != null)
+            {
+                PlotViewModel model = new PlotViewModel(Plot, this.x.IsChecked.Value, this.y.IsChecked.Value, this.legend.IsChecked.Value);
+                this.y.IsEnabled = YEnabled;
+                this.DataContext = model;
             }
         }
     }
