@@ -38,9 +38,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hammer.MDIContainer.Control, Version=2.8.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MdiContainerWPF.2.8.4\lib\Hammer.MDIContainer.Control.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.5.0.4\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
@@ -168,6 +165,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hammer.MdiContainer\Hammer.MDIContainer.Control.csproj">
+      <Project>{b68f597b-b085-4b0e-8db9-2de0420306fc}</Project>
+      <Name>Hammer.MDIContainer.Control</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

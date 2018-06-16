@@ -6,10 +6,34 @@ namespace SpiceSharpRunner.Windows.ViewModels
 {
     public class NetlistWindowViewModel : ViewModelBase, IContent
     {
-        public NetlistWindowViewModel(string initialTitle)
+        public NetlistWindowViewModel(string path)
         {
-            Title = initialTitle;
+            Path = path;
+            Title = path != null ? "Netlist: " + path : "Netlist: unsaved";
             CloseCommand = new Command(CloseWindow);
+        }
+
+        private bool _dirty;
+        public bool Dirty
+        {
+            get
+            {
+                return _dirty;
+            }
+
+            set
+            {
+                _dirty = value;
+                if (value)
+                {
+                    Title = Path != null ? "(*) Netlist: " + Path : "Netlist: unsaved";
+                }
+                else
+                {
+                    Title = Path != null ? "Netlist: " + Path : "Netlist: unsaved";
+                }
+
+            }
         }
 
         private string _netlist;
@@ -22,8 +46,20 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
             set
             {
-                _netlist = value;
-                RaisePropertyChanged("NetList");
+                if (value != _netlist)
+                {
+                
+                    if (_netlist == null)
+                    {
+                        _netlist = value;
+                    }
+                    else
+                    {
+                        _netlist = value;
+                        RaisePropertyChanged("NetList");
+                        Dirty = true;
+                    }
+                }
             }
         }
 
@@ -42,6 +78,21 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
+        private string _path;
+
+        public string Path
+        {
+            get
+            {
+                return _path;
+            }
+            set
+            {
+                _path = value;
+                RaisePropertyChanged("Path");
+            }
+        }
+
         public event EventHandler Closing;
 
         public Command CloseCommand { get; }
@@ -50,7 +101,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
         public bool CanClose
         {
-            get { return true; }
+            get { return !Dirty || MessageBox.Show("Do you want to close? You have unsaved changes.", "SpiceSharp-Runner", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes; }
         }
 
         private void CloseWindow(object p)

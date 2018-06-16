@@ -54,7 +54,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
             {
                 var content = File.ReadAllText(openFileDialog.FileName);
 
-                var item = new NetlistWindowViewModel("Netlist: " + openFileDialog.FileName);
+                var item = new NetlistWindowViewModel(openFileDialog.FileName);
                 item.Netlist = content;
 
                 item.Closing += (s, e) => this.Items.Remove(item);
@@ -66,14 +66,24 @@ namespace SpiceSharp.Runner.Windows.ViewModels
         {
             if (SelectedWindow is NetlistWindowViewModel n)
             {
-                Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
-                saveFileDialog.Filter = "Circuit files (*.cir)|*.cir|Netlist files (*.net)|*.net|All files (*.*)|*.*";
-
-                if (saveFileDialog.ShowDialog() == true)
+                if (n.Path == null)
                 {
-                    File.WriteAllText(saveFileDialog.FileName, n.Netlist);
+                    Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+                    saveFileDialog.Filter = "Circuit files (*.cir)|*.cir|Netlist files (*.net)|*.net|All files (*.*)|*.*";
+
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        File.WriteAllText(saveFileDialog.FileName, n.Netlist);
+                        System.Windows.MessageBox.Show("Saved");
+                        n.Path = saveFileDialog.FileName;
+                        n.Dirty = false;
+                    }
+                }
+                else
+                {
+                    File.WriteAllText(n.Path, n.Netlist);
+                    n.Dirty = false;
                     System.Windows.MessageBox.Show("Saved");
-                    n.Title = "Netlist: " + saveFileDialog.FileName;
                 }
             }
         }
@@ -92,7 +102,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
 
         private void NewNetlist(object parameter)
         {
-            var item = new NetlistWindowViewModel("Netlist: Noname (unsaved)");
+            var item = new NetlistWindowViewModel(null);
             item.Closing += (s, e) => this.Items.Remove(item);
             this.Items.Add(item);
         }

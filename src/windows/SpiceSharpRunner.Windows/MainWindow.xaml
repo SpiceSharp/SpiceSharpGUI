@@ -20,6 +20,10 @@
             <MenuItem Header="_Simulate">
                 <MenuItem Header="_Run"  Command="{Binding RunSimulationCommand}"/>
             </MenuItem>
+            <MenuItem Header="_Window">
+                <MenuItem Header="_Tile Vertically" Click="MenuItem_Click_2"/>
+                <MenuItem Header="_Tile Horizontally" Click="MenuItem_Click_3"/>
+            </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Click="MenuItem_Click" />
             </MenuItem>
@@ -30,7 +34,7 @@
             </StatusBarItem>
         </StatusBar>
         <DockPanel Height="Auto" Name="stackPanel2" Width="Auto" >
-            <mdi:MdiContainer Grid.Column="1" Margin="4" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedWindow, Mode=TwoWay}">
+            <mdi:MdiContainer Name="MdiContainer" Grid.Column="1" Margin="4" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedWindow, Mode=TwoWay}">
                 <mdi:MdiContainer.Resources>
                     <Style TargetType="{x:Type mdi:MdiWindow}">
                         <Setter Property="Title" Value="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
@@ -41,4 +45,7 @@
             </mdi:MdiContainer>
         </DockPanel>
     </DockPanel>
+    <Window.InputBindings>
+            <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveNetlistCommand}"/>
+    </Window.InputBindings>
 </Window>
