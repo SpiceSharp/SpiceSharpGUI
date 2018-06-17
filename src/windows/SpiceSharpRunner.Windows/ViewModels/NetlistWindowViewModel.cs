@@ -1,16 +1,24 @@
 ﻿using SpiceSharpRunner.Windows.Common;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SpiceSharpRunner.Windows.ViewModels
 {
     public class NetlistWindowViewModel : ViewModelBase, IContent
     {
-        public NetlistWindowViewModel(string path)
+        public Dispatcher Dispatcher { get; }
+        public ObservableCollection<IContent> Windows { get; }
+
+        public NetlistWindowViewModel(string path, Dispatcher dispatcher, ObservableCollection<IContent> windows)
         {
+            Windows = windows;
+            Dispatcher = dispatcher;
             Path = path;
             Title = path != null ? "Netlist: " + path : "Netlist: unsaved";
             CloseCommand = new Command(CloseWindow);
+            RunSimulation = new Command(Run);
         }
 
         private bool _dirty;
@@ -112,6 +120,8 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
         public Command CloseCommand { get; }
 
+        public Command RunSimulation { get; }
+
         public bool IsResizable { get; set; } = true;
 
         public bool CanClose
@@ -125,6 +135,17 @@ namespace SpiceSharpRunner.Windows.ViewModels
             {
                 this.Closing?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+
+        private void Run(object obj)
+        {
+            NetlistResultWindowViewModel netlistWindow = new NetlistResultWindowViewModel(Dispatcher);
+            netlistWindow.Title = "Results - " + Title;
+            netlistWindow.Netlist = Netlist;
+            netlistWindow.Mode = (SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode)SelectedMode;
+            netlistWindow.Run();
+            this.Windows.Add(netlistWindow);
         }
     }
 }

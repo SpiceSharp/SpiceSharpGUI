@@ -14,7 +14,9 @@ namespace SpiceSharp.Runner.Windows.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<IContent> Items { get; private set; }
+        public ObservableCollection<IContent> Windows { get; private set; }
+
+
         public Command NewNetlistCommand { get; }
         public Command OpenNetlistCommand { get; }
         public Command SaveNetlistCommand { get; }
@@ -38,7 +40,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
 
         public MainWindowViewModel(Dispatcher dispatcher)
         {
-            this.Items = new ObservableCollection<IContent>();
+            this.Windows = new ObservableCollection<IContent>();
             this.NewNetlistCommand = new Command(NewNetlist, (p) => true);
             this.OpenNetlistCommand = new Command(OpenNetlist, (p) => true);
             this.RunSimulationCommand = new Command(RunSimulation, (p) => SelectedWindow is NetlistWindowViewModel);
@@ -54,11 +56,11 @@ namespace SpiceSharp.Runner.Windows.ViewModels
             {
                 var content = File.ReadAllText(openFileDialog.FileName);
 
-                var item = new NetlistWindowViewModel(openFileDialog.FileName);
+                var item = new NetlistWindowViewModel(openFileDialog.FileName, Dispatcher, Windows);
                 item.Netlist = content;
 
-                item.Closing += (s, e) => this.Items.Remove(item);
-                this.Items.Add(item);
+                item.Closing += (s, e) => this.Windows.Remove(item);
+                this.Windows.Add(item);
             }
         }
 
@@ -97,15 +99,15 @@ namespace SpiceSharp.Runner.Windows.ViewModels
                 netlistWindow.Netlist = n.Netlist;
                 netlistWindow.Mode = (SpiceEvaluatorMode)n.SelectedMode;
                 netlistWindow.Run();
-                this.Items.Add(netlistWindow);
+                this.Windows.Add(netlistWindow);
             }
         }
 
         private void NewNetlist(object parameter)
         {
-            var item = new NetlistWindowViewModel(null);
-            item.Closing += (s, e) => this.Items.Remove(item);
-            this.Items.Add(item);
+            var item = new NetlistWindowViewModel(null, Dispatcher, Windows);
+            item.Closing += (s, e) => this.Windows.Remove(item);
+            this.Windows.Add(item);
         }
     }
 }

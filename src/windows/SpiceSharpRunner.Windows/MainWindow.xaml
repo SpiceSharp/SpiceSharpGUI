@@ -17,7 +17,7 @@
                 <Separator />
                 <MenuItem Header="_Exit" />
             </MenuItem>
-            <MenuItem Header="_Simulate">
+            <MenuItem Header="_Simulation">
                 <MenuItem Header="_Run"  Command="{Binding RunSimulationCommand}"/>
             </MenuItem>
             <MenuItem Header="_Window">
@@ -34,7 +34,7 @@
             </StatusBarItem>
         </StatusBar>
         <DockPanel Height="Auto" Name="stackPanel2" Width="Auto" >
-            <mdi:MdiContainer Name="MdiContainer" Grid.Column="1" Margin="4" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedWindow, Mode=TwoWay}">
+            <mdi:MdiContainer Name="MdiContainer" Grid.Column="1" Margin="4" ItemsSource="{Binding Windows}" SelectedItem="{Binding SelectedWindow, Mode=TwoWay}">
                 <mdi:MdiContainer.Resources>
                     <Style TargetType="{x:Type mdi:MdiWindow}">
                         <Setter Property="Title" Value="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />

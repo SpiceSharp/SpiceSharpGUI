@@ -26,6 +26,10 @@
                     <ComboBoxItem>HSpice</ComboBoxItem>
                     <ComboBoxItem>LtSpice</ComboBoxItem>
                 </ComboBox>
+                <Separator />
+                <Button Command="{Binding RunSimulation}" ToolTip="Runs simulation.">
+                    Run ☇
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <avalonEdit:TextEditor
