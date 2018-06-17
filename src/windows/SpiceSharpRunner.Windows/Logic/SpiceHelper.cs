@@ -7,7 +7,7 @@ namespace SpiceSharpRunner.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist)
+        public static SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode)
         {
             SpiceSharpParser.ParserFacade facade = new SpiceSharpParser.ParserFacade();
 
@@ -15,6 +15,7 @@ namespace SpiceSharpRunner.Windows.Logic
             settings.SpiceNetlistParserSettings.HasTitle = true;
             settings.SpiceNetlistParserSettings.IsNewlineRequired = true;
             settings.SpiceNetlistParserSettings.IsEndRequired = false;
+            settings.SpiceNetlistModelReaderSettings.EvaluatorMode = evaluatorMode;
 
             settings.SpiceNetlistModelReaderSettings.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;
             settings.WorkingDirectoryPath = Environment.CurrentDirectory;

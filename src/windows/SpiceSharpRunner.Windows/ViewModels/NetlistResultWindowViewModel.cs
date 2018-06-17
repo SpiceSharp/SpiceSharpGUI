@@ -2,6 +2,7 @@
 using SpiceSharp.Runner.Windows.ViewModels;
 using SpiceSharp.Simulations;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice;
+using SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.Controls;
@@ -154,6 +155,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
         }
 
         public Dispatcher Dispatcher { get; }
+        public SpiceEvaluatorMode Mode { get; internal set; }
 
         public NetlistResultWindowViewModel(Dispatcher dispatcher)
         {
@@ -171,7 +173,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
                 Plots = new TabsViewModel();
                 Prints = new ObservableCollection<UIElement>();
 
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist);
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode);
 
                 AppendStats($"Simulations found: {model.Simulations.Count}");
 

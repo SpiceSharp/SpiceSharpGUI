@@ -78,6 +78,21 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
+        private int _selectedMode;
+
+        public int SelectedMode
+        {
+            get
+            {
+                return _selectedMode;
+            }
+            set
+            {
+                _selectedMode = value;
+                RaisePropertyChanged("SelectedMode");
+            }
+        }
+
         private string _path;
 
         public string Path

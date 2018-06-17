@@ -1,4 +1,5 @@
-﻿using SpiceSharpRunner.Windows.Common;
+﻿using SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions;
+using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
                 NetlistResultWindowViewModel netlistWindow = new NetlistResultWindowViewModel(Dispatcher);
                 netlistWindow.Title = "Results for: " + n.Title;
                 netlistWindow.Netlist = n.Netlist;
+                netlistWindow.Mode = (SpiceEvaluatorMode)n.SelectedMode;
                 netlistWindow.Run();
                 this.Items.Add(netlistWindow);
             }
