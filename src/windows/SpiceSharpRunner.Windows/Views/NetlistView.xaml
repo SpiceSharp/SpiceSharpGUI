@@ -6,8 +6,21 @@
         xmlns:local="clr-namespace:SpiceSharpRunner.Windows"
         mc:Ignorable="d"
         d:DesignHeight="600" d:DesignWidth="600">
-        <DockPanel Height="Auto" Name="stackPanel1" Width="Auto" LastChildFill="True">
-                <avalonEdit:TextEditor
+    <DockPanel LastChildFill="True">
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar>
+                    <Button Command="ApplicationCommands.Cut" CommandTarget="{Binding ElementName=txtNetlist, Path=TextArea}" ToolTip="Cut selection to Windows Clipboard.">
+                        Cut
+                    </Button>
+                    <Button Command="ApplicationCommands.Copy" CommandTarget="{Binding ElementName=txtNetlist, Path=TextArea}" ToolTip="Copy selection to Windows Clipboard.">
+                        Copy
+                    </Button>
+                    <Button Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=txtNetlist, Path=TextArea}" ToolTip="Paste from Windows Clipboard.">
+                        Paste
+                    </Button>
+                </ToolBar>
+        </ToolBarTray>
+        <avalonEdit:TextEditor
                             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                             Name="txtNetlist"
                             IsReadOnly="false"
