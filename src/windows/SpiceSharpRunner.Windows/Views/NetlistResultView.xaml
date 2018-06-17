@@ -41,7 +41,7 @@
                 </DockPanel>
             </TabItem>
             <TabItem Name="PrintsTab" Header="Prints">
-                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding Prints}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -69,21 +69,23 @@
                         <Setter Property="IsEnabled" Value="{Binding PlotsEnabled}"/>
                     </Style>
                 </TabItem.Style>
-                <TabControl Name="PlotsTabs" ItemsSource="{Binding Path=Plots.Items}" SelectedItem="{Binding Path=Plots.Selected}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <TabControl Name="PlotsTabs" ItemsSource="{Binding Path=Plots.Items}" SelectedItem="{Binding Path=Plots.Selected}">
                         <TabControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Header}"></TextBlock>                                    
-                            </DataTemplate>                            
+                                <TextBlock Text="{Binding Header}"></TextBlock>
+                            </DataTemplate>
                         </TabControl.ItemTemplate>
-                    <TabControl.ContentTemplate>
-                        <DataTemplate>
-                            <ContentControl Content="{Binding Content}" />
-                        </DataTemplate>
-                    </TabControl.ContentTemplate>
-                </TabControl>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding Content}" />
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Stats">
-                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <TextBox Name="txtStats" IsReadOnly="True" AcceptsReturn="True" Text="{Binding Stats}" />
                 </ScrollViewer>
             </TabItem>

@@ -195,7 +195,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
                         {
                             Dispatcher.Invoke(() =>
                             {
-                                Plots.Items.Add(new TabItem() { Header = plot.Name, Content = new PlotControl() { Plot = plot, YEnabled = SpiceHelper.IsPlotPositive(plot) } });
+                                Plots.Items.Add(new TabItem() { Header = plot.Name, Content = new PlotControl() { Plot = plot } });
                             });
                         }
                     }

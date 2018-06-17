@@ -2,56 +2,93 @@
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
+using SpiceSharpRunner.Windows.Logic;
+using System;
+using System.Windows.Media;
 
-namespace SpiceSharpRunner.Windows.Logic
+namespace SpiceSharp.Runner.Windows.ViewModels
 {
-    /// <summary>
-    /// Plot view model
-    /// </summary>
     public class PlotViewModel
     {
-        public bool yLogEnabled;
+        private Random rand;
 
-        public Plot Plot { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PlotViewModel"/> class.
-        /// </summary>
-        /// <param name="plot"></param>
-        /// <param name="xLog"></param>
-        /// <param name="yLog"></param>
-        public PlotViewModel(Plot plot, bool xLog = false, bool yLog = false, bool legendVisible = false, bool yLogEnabled = true)
+        public PlotViewModel(Plot plot)
         {
-            Plot = plot;
-            OxyPlotModel = CreateOxyPlotModel(plot, xLog, yLog);
-            OxyPlotModel.IsLegendVisible = legendVisible;
-            OxyPlotModel.LegendPosition = LegendPosition.BottomRight;
-            this.yLogEnabled = yLogEnabled;
+            rand = new Random(Environment.TickCount);
+
+            Series = new Series[plot.Series.Count];
+            for (var i = 0; i < Series.Length; i++)
+            {
+                Series[i] = new Series() { Name = plot.Series[i].Name, Selected = true };
+            }
+
+            YScaleLogEnabled = SpiceHelper.IsPlotPositive(plot);
+            OxyPlotModel = CreateOxyPlotModel(plot);
         }
 
-        /// <summary>
-        /// Gets the plot model.
-        /// </summary>
         public PlotModel OxyPlotModel { get; private set; }
 
-        public string Name {  get { return this.Plot.Name;  } }
+        public bool YScaleLogEnabled { get; set; }
+        public event EventHandler YScaleLogChanged;
+        public event EventHandler XScaleLogChanged;
+        
+        private bool _yScaleLog;
+        public bool YScaleLog
+        {
+            get
+            {
+                return _yScaleLog;
+            }
+
+            set
+            {
+                _yScaleLog = value;
+                YScaleLogChanged?.Invoke(this, null);
+            }
+        }
+
+        private bool _xScaleLog;
+        public bool XScaleLog
+        {
+            get
+            {
+                return _xScaleLog;
+            }
+
+            set
+            {
+                _xScaleLog = value;
+                XScaleLogChanged?.Invoke(this, null);
+            }
+        }
+
+        public Series[] Series { get; set; }
+
+        public int Count
+        {
+            get
+            {
+                return Series.Length;
+            }
+        }
 
         /// <summary>
         /// Creates Oxyplot library plot model
         /// </summary>
-        /// <param name="plot">Plot data</param>
-        /// <param name="xLog">Specifies whether x-axis is logaritmic</param>
-        /// <param name="yLog">Specifies whether y-axis is logaritmic</param>
         /// <returns></returns>
-        private static PlotModel CreateOxyPlotModel(Plot plot, bool xLog, bool yLog)
+        private PlotModel CreateOxyPlotModel(Plot plot)
         {
             var tmp = new PlotModel { Title = plot.Name };
+            tmp.IsLegendVisible = false;
 
             for (var i = 0; i < plot.Series.Count; i++)
             {
                 if (plot.Series[i].Points.Count > 1)
                 {
-                    var series = new LineSeries { Title = plot.Series[i].Name, MarkerType = MarkerType.None };
+                    var series = new LineSeries { Title = plot.Series[i].Name, MarkerType = MarkerType.None, Color = OxyColor.FromRgb((byte)rand.Next(255), (byte)rand.Next(255), (byte)rand.Next(255))};
+
+                    Series[i].Brush = new SolidColorBrush(Color.FromRgb(series.Color.R, series.Color.G, series.Color.B));
+                    
                     tmp.Series.Add(series);
 
                     for (var j = 0; j < plot.Series[i].Points.Count; j++)
@@ -59,21 +96,49 @@ namespace SpiceSharpRunner.Windows.Logic
                         var y = plot.Series[i].Points[j].Y;
                         series.Points.Add(new DataPoint(plot.Series[i].Points[j].X, y));
                     }
+
+                    series.IsVisible = Series[i].Selected;
+
+                    Series[i].SelectedChanged += (o, e) => { series.IsVisible = ((SpiceSharp.Runner.Windows.ViewModels.Series)o).Selected; OxyPlotModel.InvalidatePlot(false); };
                 }
                 else
                 {
-                    var scatterSeries = new ScatterSeries { Title = plot.Series[i].Name, MarkerSize = 3, SelectionMode = SelectionMode.Single, MarkerType = MarkerType.Circle };
+                    var scatterSeries = new ScatterSeries {
+                        Title = plot.Series[i].Name,
+                        MarkerSize = 3,
+                        SelectionMode = SelectionMode.Single,
+                        MarkerType = MarkerType.Circle,
+                        MarkerFill = OxyColor.FromRgb((byte)rand.Next(255), (byte)rand.Next(255), (byte)rand.Next(255))
+                    };
+                    Series[i].Brush = new SolidColorBrush(Color.FromRgb(scatterSeries.MarkerFill.R, scatterSeries.MarkerFill.G, scatterSeries.MarkerFill.B));
+
                     scatterSeries.Points.Add(new ScatterPoint(plot.Series[i].Points[0].X, plot.Series[i].Points[0].Y));
                     tmp.Series.Add(scatterSeries);
+
+                    scatterSeries.IsVisible = Series[i].Selected;
+                    Series[i].SelectedChanged += (o, e) => { scatterSeries.IsVisible = ((SpiceSharp.Runner.Windows.ViewModels.Series)o).Selected; OxyPlotModel.InvalidatePlot(false); };
+
                 }
             }
 
+            CreateAxis(plot, tmp);
+
+            YScaleLogChanged += (o, e) => { CreateAxis(plot, tmp); OxyPlotModel.InvalidatePlot(false); };
+            XScaleLogChanged += (o, e) => { CreateAxis(plot, tmp); OxyPlotModel.InvalidatePlot(false); };
+
+            return tmp;
+        }
+
+        private void CreateAxis(Plot plot, PlotModel tmp)
+        {
             if (plot.Series.Count > 0)
             {
                 string xUnit = plot.Series[0].XUnit;
                 string yUnit = plot.Series[0].YUnit;
 
-                if (xLog)
+                tmp.Axes.Clear();
+
+                if (XScaleLog)
                 {
                     tmp.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Bottom, Unit = xUnit });
                 }
@@ -82,7 +147,7 @@ namespace SpiceSharpRunner.Windows.Logic
                     tmp.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Unit = xUnit });
                 }
 
-                if (yLog)
+                if (YScaleLog)
                 {
                     tmp.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Left, Unit = yUnit });
                 }
@@ -91,8 +156,30 @@ namespace SpiceSharpRunner.Windows.Logic
                     tmp.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Unit = yUnit });
                 }
             }
-
-            return tmp;
         }
+    }
+
+    public class Series
+    {
+        public string Name { get; set; }
+
+        private bool _selected;
+        public bool Selected
+        {
+            get
+            {
+                return _selected;
+            }
+
+            set
+            {
+                _selected = value;
+                SelectedChanged?.Invoke(this, null);
+            }
+        }
+
+        public SolidColorBrush Brush { get; internal set; }
+
+        public event EventHandler SelectedChanged;
     }
 }

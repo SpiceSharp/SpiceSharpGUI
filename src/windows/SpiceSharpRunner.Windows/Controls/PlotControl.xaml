@@ -12,12 +12,59 @@
             <Label DockPanel.Dock="Top">
                 <TextBlock TextDecorations="Underline">Options</TextBlock>
             </Label>
-            <CheckBox Name="x" Width="170"  Content="X-axis logarithmic scale" Height="20" DockPanel.Dock="Left" Click="CheckBox_Click" />
-            <CheckBox Name="y" Width="170"  Content="Y-axis logarithmic scale" Height="20" DockPanel.Dock="Left" Click="CheckBox_Click_1"/>
-            <CheckBox Name="legend" Width="170"  Content="Show legend" Height="20" DockPanel.Dock="Left"  Click="CheckBox_Click_3"/>
+            <CheckBox Name="x" Width="170" IsChecked="{Binding XScaleLog}" Content="X-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
+            <CheckBox Name="y" Width="170" IsChecked="{Binding YScaleLog}" IsEnabled="{Binding YScaleLogEnabled}"  Content="Y-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
             <Button Name="save" Content="Export to BMP" DockPanel.Dock="Right"  Width="120" Margin="0,0,20,20" Click="save_Click"/>
         </DockPanel>
-        <oxy:PlotView Background="Azure" Name="plot" MinHeight="200" DockPanel.Dock="Bottom" Model="{Binding OxyPlotModel, UpdateSourceTrigger=PropertyChanged}"/>
-            
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <oxy:PlotView Grid.Column="0" Background="Azure" Name="plot" MinHeight="200" DockPanel.Dock="Bottom" Model="{Binding Path=OxyPlotModel, UpdateSourceTrigger=PropertyChanged}"/>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+            <StackPanel Grid.Column="2" Grid.RowSpan="2">
+                <ItemsControl ItemsSource="{Binding Series}" Height="{Binding Path=ActualHeight,
+                       RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}}">
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="{x:Type ItemsControl}">
+                            <DockPanel>
+                                <Label FontSize="16" DockPanel.Dock="Top">
+                                    <WrapPanel Orientation="Horizontal">
+                                        <TextBlock Text="Series = "/>
+                                        <TextBlock Text="{Binding Count}"></TextBlock>
+                                    </WrapPanel>
+                                </Label>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" >
+                                    <Button Click="Button_Click" Margin="5">
+                                        Unselect all
+                                    </Button>
+                                    <Button Click="Button2_Click" Margin="5">
+                                        Select all
+                                    </Button>
+                                </StackPanel>
+                                <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <ItemsPresenter></ItemsPresenter>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Selected}">
+                                <WrapPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{Binding Brush}">●</TextBlock>
+                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                </WrapPanel>
+                            </CheckBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
     </DockPanel>
 </UserControl>
