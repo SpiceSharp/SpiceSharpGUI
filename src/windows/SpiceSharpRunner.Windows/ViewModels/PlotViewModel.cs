@@ -31,7 +31,8 @@ namespace SpiceSharp.Runner.Windows.ViewModels
         public bool YScaleLogEnabled { get; set; }
         public event EventHandler YScaleLogChanged;
         public event EventHandler XScaleLogChanged;
-        
+        public event EventHandler ShowLegendChanged;
+
         private bool _yScaleLog;
         public bool YScaleLog
         {
@@ -62,6 +63,21 @@ namespace SpiceSharp.Runner.Windows.ViewModels
             }
         }
 
+        private bool _showLegend;
+        public bool ShowLegend
+        {
+            get
+            {
+                return _showLegend;
+            }
+
+            set
+            {
+                _showLegend = value;
+                ShowLegendChanged?.Invoke(this, null);
+            }
+        }
+
         public Series[] Series { get; set; }
 
         public int Count
@@ -79,7 +95,9 @@ namespace SpiceSharp.Runner.Windows.ViewModels
         private PlotModel CreateOxyPlotModel(Plot plot)
         {
             var tmp = new PlotModel { Title = plot.Name };
-            tmp.IsLegendVisible = false;
+            tmp.IsLegendVisible = ShowLegend;
+
+            this.ShowLegendChanged += (o, e) => { tmp.IsLegendVisible = this.ShowLegend; OxyPlotModel.InvalidatePlot(false); };
 
             for (var i = 0; i < plot.Series.Count; i++)
             {
