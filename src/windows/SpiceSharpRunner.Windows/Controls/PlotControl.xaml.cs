@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using OxyPlot;
+using OxyPlot.Wpf;
 using SpiceSharp.Runner.Windows.ViewModels;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Logic;
@@ -17,12 +19,12 @@ namespace SpiceSharpRunner.Windows.Controls
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty PlotProperty = DependencyProperty.Register("Plot", typeof(Plot), typeof(PlotControl),
+        public static readonly DependencyProperty PlotProperty = DependencyProperty.Register("Plot", typeof(SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot), typeof(PlotControl),
                         new PropertyMetadata(OnPlotPropertyChanged));
 
-        public Plot Plot
+        public SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot Plot
         {
-            get { return GetValue(PlotProperty) as Plot; }
+            get { return GetValue(PlotProperty) as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot; }
             set
             {
                 SetValue(PlotProperty, value);
@@ -40,13 +42,13 @@ namespace SpiceSharpRunner.Windows.Controls
             if (dialog.ShowDialog() == true)
             {
                 this.plot.SaveBitmap(dialog.FileName);
-                MessageBox.Show("Saved");
+                MessageBox.Show("Saved", "SpiceSharpRunner");
             }
         }
 
         private static void OnPlotPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((PlotControl)d).Plot = e.NewValue as Plot;
+            ((PlotControl)d).Plot = e.NewValue as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot;
             ((PlotControl)d).DataBind();
         }
 
@@ -74,6 +76,21 @@ namespace SpiceSharpRunner.Windows.Controls
                 series.Selected = true;
             }
         }
-        
+
+        private void save_png_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog()
+            {
+                Filter = "PNG files (*.png)|*.png|All files (*.*)|*.*"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
+                pngExporter.ExportToFile(((PlotViewModel)this.DataContext).OxyPlotModel, dialog.FileName);
+                MessageBox.Show("Saved", "SpiceSharpRunner");
+            }
+
+        }
     }
 }

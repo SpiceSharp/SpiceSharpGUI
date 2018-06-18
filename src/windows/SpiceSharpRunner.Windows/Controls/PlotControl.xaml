@@ -15,7 +15,8 @@
             <CheckBox Name="x" Width="170" IsChecked="{Binding XScaleLog}" Content="X-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
             <CheckBox Name="y" Width="170" IsChecked="{Binding YScaleLog}" IsEnabled="{Binding YScaleLogEnabled}"  Content="Y-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
             <CheckBox Name="legend"  IsChecked="{Binding ShowLegend}" Content="Show legend" Height="20" DockPanel.Dock="Left" />
-            <Button Name="save" Content="Export to BMP" DockPanel.Dock="Right"  Width="120" Margin="0,0,20,20" Click="save_Click"/>
+            <Button Name="save" Content="Export to BMP" DockPanel.Dock="Right"  Width="93" Margin="0,0,20,20" Click="save_Click"/>
+            <Button x:Name="save_png" Content="Export to PNG" DockPanel.Dock="Right"  Width="93" Margin="0,0,20,20" Click="save_png_Click"/>
         </DockPanel>
         <Grid>
             <Grid.ColumnDefinitions>
