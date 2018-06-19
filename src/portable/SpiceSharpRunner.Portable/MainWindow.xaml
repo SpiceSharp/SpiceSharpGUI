@@ -1,0 +1,16 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SpiceSharpRunner.Portable">
+  <DockPanel Name="stackPanel1" LastChildFill="True">
+    <Menu  DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
+      </MenuItem>
+      <MenuItem Header="_Simulation">
+        <MenuItem Header="_Run"  Command="{Binding RunCommand}" CommandParameter="{Binding #netlist.Text}"/>
+      </MenuItem>
+    </Menu>
+   <TextBox AcceptsReturn="True" TextWrapping="Wrap" Name="netlist"
+    Text="" Watermark="Type Spice netlist hear" />
+  </DockPanel>
+</Window>

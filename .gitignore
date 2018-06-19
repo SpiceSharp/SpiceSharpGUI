@@ -4,3 +4,6 @@ src/windows/packages/
 src/windows/.vs/
 src/windows/SpiceSharpRunner.Windows/obj/
 src/windows/SpiceSharpRunner.Windows/bin/
+src/portable/SpiceSharpRunner.Portable/.vs/
+src/portable/SpiceSharpRunner.Portable/bin/
+src/portable/SpiceSharpRunner.Portable/obj/
