@@ -1,7 +1,7 @@
 # SpiceSharpRunner (in development)
-
-## For Windows:
+## Current state:
+### For Windows:
 ![Screen](/screenshots/screen1.PNG)
 
-## For Portable:
+### Portable:
 ![Screen](/screenshots/screen_portable.PNG)
