@@ -11,6 +11,6 @@
       </MenuItem>
     </Menu>
    <TextBox AcceptsReturn="True" TextWrapping="Wrap" Name="netlist"
-    Text="" Watermark="Type Spice netlist hear" />
+    Text=""/>
   </DockPanel>
 </Window>

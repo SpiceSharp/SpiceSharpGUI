@@ -8,6 +8,7 @@ namespace SpiceSharpRunner.Portable
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            base.Initialize();
         }
     }
 }

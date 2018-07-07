@@ -1,0 +1,6 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"
+        Title="PlotWindow">
+    <oxy:PlotView x:Name="plot1" Background="Azure" Width="800" Height="500" Model="{Binding PlotModel}" DockPanel.Dock="Top"/>
+</Window>

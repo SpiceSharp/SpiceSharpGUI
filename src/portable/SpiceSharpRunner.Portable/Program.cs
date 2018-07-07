@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Logging.Serilog;
+using OxyPlot.Avalonia;
 
 namespace SpiceSharpRunner.Portable
 {
@@ -8,12 +9,15 @@ namespace SpiceSharpRunner.Portable
     {
         static void Main(string[] args)
         {
+            OxyPlotModule.EnsureLoaded();
             BuildAvaloniaApp().Start<MainWindow>();
         }
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
+                .BeforeStarting(_ => OxyPlotModule.Initialize())
                 .UsePlatformDetect()
+                .UseReactiveUI()
                 .LogToDebug();
     }
 }

@@ -1,0 +1,8 @@
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\bin\Debug\netstandard2.0\OxyPlot.Avalonia.deps.json
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\bin\Debug\netstandard2.0\OxyPlot.Avalonia.dll
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\bin\Debug\netstandard2.0\OxyPlot.Avalonia.pdb
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\obj\Debug\netstandard2.0\OxyPlot.Avalonia.csproj.CoreCompileInputs.cache
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\obj\Debug\netstandard2.0\OxyPlot.Avalonia.AssemblyInfoInputs.cache
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\obj\Debug\netstandard2.0\OxyPlot.Avalonia.AssemblyInfo.cs
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\obj\Debug\netstandard2.0\OxyPlot.Avalonia.dll
+C:\dev\git\SpiceSharp-Runner\src\portable\OxyPlot.Avalonia\obj\Debug\netstandard2.0\OxyPlot.Avalonia.pdb

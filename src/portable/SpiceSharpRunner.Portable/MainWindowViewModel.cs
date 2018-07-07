@@ -36,7 +36,15 @@ namespace SpiceSharpRunner.Portable
 
                 var parseResult = Logic.SpiceHelper.GetSpiceSharpNetlist(netlist, SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode.Spice3f5);
                 Logic.SpiceHelper.Run(parseResult);
-                Console.WriteLine("Finished");
+
+                if (parseResult.Plots.Count > 0)
+                {
+                    foreach (var plot in parseResult.Plots)
+                    {
+                        PlotWindow window = new PlotWindow(plot);
+                        window.Show();
+                    }
+                }
 
                 return Unit.Default;
             }
