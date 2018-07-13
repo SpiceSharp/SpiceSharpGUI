@@ -1,23 +1,73 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Diagnostics.ViewModels;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Reactive;
-using System.Text;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
 
 namespace SpiceSharpRunner.Portable
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ReactiveCommand ExitCommand { get; }
+        public Window Window { get; }
 
-        public ReactiveCommand<string, Unit> RunCommand { get; }
-
-        public MainWindowViewModel()
+        public MainWindowViewModel(Window window)
         {
+            Window = window;
+            OpenCommand = ReactiveCommand.CreateFromTask(Open);
+            SaveCommand = ReactiveCommand.CreateFromTask(Save);
+            RunCommand = ReactiveCommand.Create(Run);
             ExitCommand = ReactiveCommand.Create(Exit);
-            RunCommand = ReactiveCommand.Create<string, Unit>(Run);
+        }
+
+        public ReactiveCommand OpenCommand { get; }
+        public ReactiveCommand ExitCommand { get; }
+        public ReactiveCommand SaveCommand { get; }
+        public ReactiveCommand RunCommand { get; }
+
+        private string _netlist;
+        public string Netlist
+        {
+            get
+            {
+                return _netlist;
+            }
+
+            set
+            {
+                this._netlist = value;
+                RaisePropertyChanged("Netlist");
+            }
+        }
+
+        private async Task Open()
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.AllowMultiple = false;
+            dialog.Title = "Opening netlist dialog";
+            var files = await dialog.ShowAsync();
+
+            if (files.Length > 0)
+            {
+                Netlist = File.ReadAllText(files[0]);
+            }
+        }
+
+        private async Task Save()
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Title = "Saving netlist dialog";
+            var fileName = await dialog.ShowAsync(Window);
+
+            if (fileName != null)
+            {
+                File.WriteAllText(fileName, Netlist);
+
+                Window.Title = "SpiceSharpRunner.Portable: " + fileName;
+            }
         }
 
         private void Exit()
@@ -25,16 +75,16 @@ namespace SpiceSharpRunner.Portable
             Application.Current.Exit();
         }
 
-        private Unit Run(string netlist)
+        private Unit Run()
         {
             try
             {
-                if (netlist == null)
+                if (Netlist == null)
                 {
                     return Unit.Default;
                 }
 
-                var parseResult = Logic.SpiceHelper.GetSpiceSharpNetlist(netlist, SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode.Spice3f5);
+                var parseResult = Logic.SpiceHelper.GetSpiceSharpNetlist(Netlist, SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode.Spice3f5);
                 Logic.SpiceHelper.Run(parseResult);
 
                 if (parseResult.Plots.Count > 0)

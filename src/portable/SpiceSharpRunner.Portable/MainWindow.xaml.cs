@@ -14,7 +14,7 @@ namespace SpiceSharpRunner.Portable
 #if DEBUG
             this.AttachDevTools();
 #endif
-            this.DataContext = new MainWindowViewModel();
+            this.DataContext = new MainWindowViewModel(this);
         }
 
         private void InitializeComponent()

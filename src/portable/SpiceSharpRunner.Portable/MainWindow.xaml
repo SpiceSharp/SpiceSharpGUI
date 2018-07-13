@@ -4,13 +4,14 @@
   <DockPanel Name="stackPanel1" LastChildFill="True">
     <Menu  DockPanel.Dock="Top">
       <MenuItem Header="_File">
+        <MenuItem Header="_Open" Command="{Binding OpenCommand}"/>
+        <MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
         <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
       </MenuItem>
       <MenuItem Header="_Simulation">
-        <MenuItem Header="_Run"  Command="{Binding RunCommand}" CommandParameter="{Binding #netlist.Text}"/>
+        <MenuItem Header="_Run"  Command="{Binding RunCommand}"/>
       </MenuItem>
     </Menu>
-   <TextBox AcceptsReturn="True" TextWrapping="Wrap" Name="netlist"
-    Text=""/>
+   <TextBox AcceptsReturn="True" TextWrapping="Wrap" Name="netlist" Text="{Binding Netlist, Mode=TwoWay}"/>
   </DockPanel>
 </Window>
