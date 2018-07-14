@@ -2,8 +2,9 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
+using SpiceSharpRunner.Portable.ViewModels;
 
-namespace SpiceSharpRunner.Portable
+namespace SpiceSharpRunner.Portable.Views
 {
     public class PlotWindow : Window
     {

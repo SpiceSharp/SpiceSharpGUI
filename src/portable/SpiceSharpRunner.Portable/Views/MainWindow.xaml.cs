@@ -2,9 +2,10 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ReactiveUI;
+using SpiceSharpRunner.Portable.ViewModels;
 using System.Reactive;
 
-namespace SpiceSharpRunner.Portable
+namespace SpiceSharpRunner.Portable.Views
 {
     public class MainWindow : Window
     {

@@ -2,7 +2,7 @@
 using OxyPlot.Axes;
 using OxyPlot.Series;
 
-namespace SpiceSharpRunner.Portable
+namespace SpiceSharpRunner.Portable.ViewModels
 {
     public class PlotWindowViewModel 
     {

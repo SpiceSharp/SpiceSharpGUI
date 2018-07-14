@@ -2,13 +2,13 @@
 using Avalonia.Controls;
 using Avalonia.Diagnostics.ViewModels;
 using ReactiveUI;
+using SpiceSharpRunner.Portable.Views;
 using System;
 using System.IO;
 using System.Reactive;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
-namespace SpiceSharpRunner.Portable
+namespace SpiceSharpRunner.Portable.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {

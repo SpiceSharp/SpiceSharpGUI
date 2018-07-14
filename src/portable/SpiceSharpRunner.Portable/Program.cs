@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Logging.Serilog;
 using OxyPlot.Avalonia;
+using SpiceSharpRunner.Portable.Views;
 
 namespace SpiceSharpRunner.Portable
 {

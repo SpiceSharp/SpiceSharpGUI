@@ -25,7 +25,7 @@
     <ProjectReference Include="..\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="PlotWindow.xaml">
+    <EmbeddedResource Update="Views\PlotWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
