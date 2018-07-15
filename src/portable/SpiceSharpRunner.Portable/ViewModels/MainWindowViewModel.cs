@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Diagnostics.ViewModels;
 using ReactiveUI;
+using SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions;
 using SpiceSharpRunner.Portable.Views;
 using System;
 using System.IO;
@@ -21,12 +22,21 @@ namespace SpiceSharpRunner.Portable.ViewModels
             SaveCommand = ReactiveCommand.CreateFromTask(Save);
             RunCommand = ReactiveCommand.Create(Run);
             ExitCommand = ReactiveCommand.Create(Exit);
+            AboutCommand = ReactiveCommand.Create(About);
         }
 
         public ReactiveCommand OpenCommand { get; }
         public ReactiveCommand ExitCommand { get; }
         public ReactiveCommand SaveCommand { get; }
         public ReactiveCommand RunCommand { get; }
+        public ReactiveCommand AboutCommand { get; }
+
+
+        public int SelectedEvaluatorMode
+        {
+            get;
+            set;
+        }
 
         private string _netlist;
         public string Netlist
@@ -75,6 +85,11 @@ namespace SpiceSharpRunner.Portable.ViewModels
             Application.Current.Exit();
         }
 
+        private void About()
+        {
+            Console.WriteLine("Spice simulation environment for Linux and MacOS built with SpiceSharp and SpiceSharpParser. Used third-party libraries: Avalonia, OxyPlot");
+        }
+
         private Unit Run()
         {
             try
@@ -84,7 +99,7 @@ namespace SpiceSharpRunner.Portable.ViewModels
                     return Unit.Default;
                 }
 
-                var parseResult = Logic.SpiceHelper.GetSpiceSharpNetlist(Netlist, SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode.Spice3f5);
+                var parseResult = Logic.SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceEvaluatorMode)SelectedEvaluatorMode);
                 Logic.SpiceHelper.Run(parseResult);
 
                 if (parseResult.Plots.Count > 0)

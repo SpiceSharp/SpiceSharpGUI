@@ -11,7 +11,23 @@
       <MenuItem Header="_Simulation">
         <MenuItem Header="_Run"  Command="{Binding RunCommand}"/>
       </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="_About" Command="{Binding AboutCommand}" />
+      </MenuItem>
     </Menu>
-   <TextBox AcceptsReturn="True" TextWrapping="Wrap" Name="netlist" Text="{Binding Netlist, Mode=TwoWay}"/>
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5">
+      <TextBlock Height="20" Margin="5">
+        Evaluator mode:
+      </TextBlock>
+      <DropDown SelectedIndex="{Binding SelectedEvaluatorMode, Mode=TwoWay}">
+        <DropDownItem>Spice3f5</DropDownItem>
+        <DropDownItem>SmartSpice</DropDownItem>
+        <DropDownItem>HSpice</DropDownItem>
+        <DropDownItem>LtSpice</DropDownItem>
+      </DropDown>
+      <Separator Margin="5"></Separator>
+      <Button Command="{Binding RunCommand}">Run</Button>
+    </StackPanel>
+   <TextBox AcceptsReturn="True" TextWrapping="Wrap" FontFamily="Consolas" Name="netlist" Text="{Binding Netlist, Mode=TwoWay}"/>
   </DockPanel>
 </Window>
