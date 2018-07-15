@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:SpiceSharpRunner.Windows.ViewModels"
              xmlns:v="clr-namespace:SpiceSharpRunner.Windows.Views"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type vm:NetlistWindowViewModel}">
             <v:NetlistView />
