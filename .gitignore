@@ -7,3 +7,5 @@ src/windows/SpiceSharpRunner.Windows/bin/
 src/portable/SpiceSharpRunner.Portable/.vs/
 src/portable/SpiceSharpRunner.Portable/bin/
 src/portable/SpiceSharpRunner.Portable/obj/
+src/portable/OxyPlot.Avalonia/bin/
+src/portable/OxyPlot.Avalonia/obj/
