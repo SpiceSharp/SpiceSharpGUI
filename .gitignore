@@ -9,3 +9,5 @@ src/portable/SpiceSharpRunner.Portable/bin/
 src/portable/SpiceSharpRunner.Portable/obj/
 src/portable/OxyPlot.Avalonia/bin/
 src/portable/OxyPlot.Avalonia/obj/
+src/portable/AvaloniaExamples/bin/
+src/portable/AvaloniaExamples/obj/
