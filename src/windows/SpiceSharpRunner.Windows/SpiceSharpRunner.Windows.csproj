@@ -89,6 +89,7 @@
     <Compile Include="ViewModels\NetlistResultWindowViewModel.cs" />
     <Compile Include="ViewModels\NetlistWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotViewModel.cs" />
+    <Compile Include="ViewModels\SimulationStatistics.cs" />
     <Compile Include="Windows\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>

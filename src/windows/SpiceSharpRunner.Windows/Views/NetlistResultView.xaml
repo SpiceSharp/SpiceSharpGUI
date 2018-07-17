@@ -48,7 +48,6 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="100" />
                                     </Grid.ColumnDefinitions>
                                     <ContentControl Content="{Binding}" />
                                 </Grid>
@@ -85,9 +84,16 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Stats">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <TextBox Name="txtStats" IsReadOnly="True" AcceptsReturn="True" Text="{Binding Stats}" />
-                </ScrollViewer>
+                    <DataGrid
+                      ItemsSource="{Binding Stats}"
+                      IsReadOnly="True"
+                      IsTextSearchEnabled="True"
+                      SelectionUnit="CellOrRowHeader"
+                      ClipboardCopyMode="IncludeHeader"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalAlignment="Stretch">
+                    </DataGrid>
             </TabItem>
         </TabControl>
     </DockPanel>

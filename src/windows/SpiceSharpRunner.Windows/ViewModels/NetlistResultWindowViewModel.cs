@@ -8,7 +8,9 @@ using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.Controls;
 using SpiceSharpRunner.Windows.Logic;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -124,8 +126,9 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
-        private string _stats;
-        public string Stats
+        private ObservableCollection<SimulationStatistics> _stats = new ObservableCollection<SimulationStatistics>();
+
+        public ObservableCollection<SimulationStatistics> Stats
         {
             get
             {
@@ -175,11 +178,13 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
                 var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode);
 
-                AppendStats($"Simulations found: {model.Simulations.Count}");
+                Logs += $"Simulations found: {model.Simulations.Count}\n";
 
+                int simulationNo = 1;
                 foreach (BaseSimulation simulation in model.Simulations)
                 {
-                    RunSimulation(model, simulation);
+                    RunSimulation(model, simulation, simulationNo);
+                    simulationNo++;
                 }
 
                 // Generate plots
@@ -187,7 +192,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
                 {
                     PlotsEnabled = true;
 
-                    AppendStats($"Creating plots: {model.Plots.Count}");
+                    Logs += $"Creating plots: {model.Plots.Count}\n";
 
                     if (model.Plots.Count > 0)
                     {
@@ -201,7 +206,8 @@ namespace SpiceSharpRunner.Windows.ViewModels
                     }
                 }
 
-                AppendStats($"Prints found: {model.Prints.Count}");
+                Logs += $"Prints found: {model.Prints.Count}\n";
+
                 if (model.Prints.Count > 0)
                 {
                     foreach (var print in model.Prints)
@@ -232,7 +238,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
-        private void RunSimulation(SpiceNetlistReaderResult model, BaseSimulation simulation)
+        private void RunSimulation(SpiceNetlistReaderResult model, BaseSimulation simulation, int index)
         {
             // Setup for Internals tab
             simulation.FinalizeSimulationExport += (arg, e) => {
@@ -282,30 +288,29 @@ namespace SpiceSharpRunner.Windows.ViewModels
                     this.Internals.Items.Add(new TreeItem() { Content = simulationItem });
                 });
             };
-
-            AppendStats("---");
-            AppendStats($"Running simulation: { simulation.Name }");
-            AppendStats($"Plots found: {model.Plots.Count}");
+            var simulationStats = new SimulationStatistics()
+            {
+                SimulationNo = index,
+                SimulationName = simulation.Name.ToString(),
+            };
 
             simulation.Run(model.Circuit);
-           
-            AppendStats($"Finished executing simulation {simulation.Name} ({simulation.GetType()})");
-            AppendStats($"Number of itrations: {simulation.Statistics.Iterations}");
-            AppendStats($"Solve time: {simulation.Statistics.SolveTime.ElapsedMilliseconds} ms");
-            AppendStats($"Load time: {simulation.Statistics.LoadTime.ElapsedMilliseconds} ms");
-            AppendStats($"Reorder time: {simulation.Statistics.ReorderTime.ElapsedMilliseconds} ms");
-            AppendStats($"Behavior creation time: {simulation.Statistics.BehaviorCreationTime.ElapsedMilliseconds} ms");
-            AppendStats($"Timepoints calculated: {simulation.Statistics.TimePoints}");
-            AppendStats($"Transient iterations: {simulation.Statistics.TransientIterations}");
-            AppendStats($"Transient time: {simulation.Statistics.TransientTime.ElapsedMilliseconds} ms");
-            AppendStats($"Accepted timepoints: {simulation.Statistics.Accepted}");
-            AppendStats($"Rejected timepoints: {simulation.Statistics.Rejected}");
-            AppendStats("---");
-        }
 
-        private void AppendStats(string text)
-        {
-            Stats += (text + "\n");
+            simulationStats.Iterations = simulation.Statistics.Iterations;
+            simulationStats.SolveTime = simulation.Statistics.SolveTime.ElapsedMilliseconds;
+            simulationStats.LoadTime = simulation.Statistics.LoadTime.ElapsedMilliseconds;
+            simulationStats.ReorderTime = simulation.Statistics.ReorderTime.ElapsedMilliseconds;
+            simulationStats.BehaviorCreationTime = simulation.Statistics.BehaviorCreationTime.ElapsedMilliseconds;
+            simulationStats.Timepoints = simulation.Statistics.TimePoints;
+            simulationStats.TransientIterations = simulation.Statistics.TransientIterations;
+            simulationStats.TransientTime = simulation.Statistics.TransientTime.ElapsedMilliseconds;
+            simulationStats.AcceptedTimepoints = simulation.Statistics.Accepted;
+            simulationStats.RejectedTimepoints = simulation.Statistics.Rejected;
+
+            Dispatcher.Invoke(() =>
+            {
+                Stats.Add(simulationStats);
+            });
         }
 
         /// <summary>
@@ -317,173 +322,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
             {
                 RunSimulations();
             });
-
-            /*
-            RunOnGUIThread(() =>
-            {
-                PlotsTab.IsEnabled = false;
-                LogsTab.IsEnabled = false;
-            });
-
-            Stopwatch mainWatch = new Stopwatch();
-            Stopwatch secondaryWatch = new Stopwatch();
-            try
-            {
-                mainWatch.Start();
-
-                // Reading netlist 
-                secondaryWatch.Reset();
-                secondaryWatch.Start();
-                var spiceSharpModel = SpiceHelper.GetSpiceSharpNetlist(Netlist);
-                secondaryWatch.Stop();
-
-                RunOnGUIThread(() =>
-                {
-                    AppendStats($"Translating Netlist object model to Spice# time: { secondaryWatch.ElapsedMilliseconds} ms");
-                });
-
-              
-                // Prints 
-                RunOnGUIThread(() =>
-                {
-                    AppendStats($"Prints found: {spiceSharpModel.Prints.Count}");
-                });
-
-                if (spiceSharpModel.Prints.Count > 0)
-                {
-                    foreach (var print in spiceSharpModel.Prints)
-                    {
-                        RunOnGUIThread(() =>
-                        {
-                            this.PrintsTab.IsEnabled = true;
-                            PrintControl control = new PrintControl(print);
-                            control.DataBind();
-                            this.PrintsPanel.Children.Add(control);
-                        });
-                    }
-                }
-
-                // Warnings
-                foreach (var warning in spiceSharpModel.Warnings)
-                {
-                    RunOnGUIThread(() =>
-                    {
-                        txtLogs.Text += ("Warning: " + warning + "\n");
-                    });
-                }
-                mainWatch.Stop();
-
-                // Successfull finish
-                RunOnGUIThread(() =>
-                {
-                    this.LogsTab.IsEnabled = true;
-                    this.lblStatus.Text = "Status: Finished";
-                    AppendStats($"---\nFinished executing netlist in {mainWatch.ElapsedMilliseconds} ms");
-                });
-
-            }
-            catch (Exception ex)
-            {
-                // Error finish
-                RunOnGUIThread(() =>
-                {
-                    txtLogs.Text += "Exception occurred: " + ex.ToString();
-                    this.lblStatus.Text = "Status: Error (see 'Logs' tab)";
-                    AppendStats($"---\nFinished executing netlist in {mainWatch.ElapsedMilliseconds} ms");
-                    this.LogsTab.IsSelected = true;
-                    this.LogsTab.IsEnabled = true;
-                });
-            }
-            */
         }
-
-        /*
-        private void RunSimulation(Stopwatch secondaryWatch, SpiceNetlistReaderResult connectorResult, BaseSimulation simulation)
-        {
-            secondaryWatch.Reset();
-            secondaryWatch.Start();
-
-            simulation.FinalizeSimulationExport += (arg, e) => {
-                // Circuit object tab
-                RunOnGUIThread(() =>
-                {
-                    TreeViewItem simulationItem = new TreeViewItem() { Header = simulation.Name };
-                    TreeViewItem objects = new TreeViewItem() { Header = "Objects" };
-                    simulationItem.Items.Add(objects);
-
-                    var enumerator = connectorResult.Circuit.Objects.GetEnumerator();
-                    while (enumerator.MoveNext())
-                    {
-                        var entity = enumerator.Current;
-                        TreeViewItem item = new TreeViewItem() { Header = (string.Format("{0}     -    ({1})", entity.Name, entity)) };
-
-                        if (entity is Component c)
-                        {
-                            for (var i = 0; i < c.PinCount; i++)
-                            {
-                                var nodeId = c.GetNode(i);
-                                TreeViewItem nodeItem = new TreeViewItem() { Header = (string.Format("Node: {0}", nodeId)) };
-                                item.Items.Add(nodeItem);
-                            }
-                        }
-
-                        objects.Items.Add(item);
-                    }
-
-                    TreeViewItem variables = new TreeViewItem() { Header = "Variables" };
-                    simulationItem.Items.Add(variables);
-
-                    foreach (var variable in simulation.Nodes.GetVariables())
-                    {
-                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", variable.Name, variable.UnknownType) };
-                        variables.Items.Add(item);
-                    }
-
-                    TreeViewItem parameters = new TreeViewItem() { Header = "Parameters" };
-                    simulationItem.Items.Add(parameters);
-
-                    foreach (var parameter in connectorResult.Evaluator.GetParameterNames())
-                    {
-                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, connectorResult.Evaluator.GetParameterValue(parameter, simulation)) };
-                        parameters.Items.Add(item);
-                    }
-
-                    this.CircuitElementsTreeView.Items.Add(simulationItem);
-                });
-            };
-            simulation.Run(connectorResult.Circuit);
-            secondaryWatch.Stop();
-
-            // Stats
-            RunOnGUIThread(() =>
-            {
-                AppendStats("---");
-                AppendStats($"Finished executing simulation {simulation.Name} ({simulation.GetType()}) in {secondaryWatch.ElapsedMilliseconds} ms");
-
-                AppendStats($"Number of itrations: {simulation.Statistics.Iterations}");
-                AppendStats($"Solve time: {simulation.Statistics.SolveTime.ElapsedMilliseconds} ms");
-                AppendStats($"Load time: {simulation.Statistics.LoadTime.ElapsedMilliseconds} ms");
-                AppendStats($"Reorder time: {simulation.Statistics.ReorderTime.ElapsedMilliseconds} ms");
-                AppendStats($"Behavior creation time: {simulation.Statistics.BehaviorCreationTime.ElapsedMilliseconds} ms");
-                AppendStats($"Timepoints calculated: {simulation.Statistics.TimePoints}");
-                AppendStats($"Transient iterations: {simulation.Statistics.TransientIterations}");
-                AppendStats($"Transient time: {simulation.Statistics.TransientTime.ElapsedMilliseconds} ms");
-                AppendStats($"Accepted timepoints: {simulation.Statistics.Accepted}");
-                AppendStats($"Rejected timepoints: {simulation.Statistics.Rejected}");
-                AppendStats("---");
-            });
-        }
-
-        private void RunOnGUIThread(Action action)
-        {
-            this.Dispatcher.Invoke(() => action());
-        }
-
-        private void AppendStats(string text)
-        {
-            this.txtStats.Text += (text + "\n");
-        }
-
-    */
     }
 }
