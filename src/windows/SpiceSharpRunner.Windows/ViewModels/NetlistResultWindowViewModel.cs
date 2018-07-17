@@ -273,9 +273,9 @@ namespace SpiceSharpRunner.Windows.ViewModels
                     TreeViewItem parameters = new TreeViewItem() { Header = "Parameters" };
                     simulationItem.Items.Add(parameters);
 
-                    foreach (var parameter in model.Evaluator.GetParameterNames())
+                    foreach (var parameter in model.Evaluators[simulation].GetParameterNames())
                     {
-                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, model.Evaluator.GetParameterValue(parameter, simulation)) };
+                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, model.Evaluators[simulation].GetParameterValue(parameter, simulation)) };
                         parameters.Items.Add(item);
                     }
 
