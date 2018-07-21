@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpiceSharpRunner.Windows"
         mc:Ignorable="d"
-        d:DesignHeight="600" d:DesignWidth="600">
+        d:DesignHeight="600" d:DesignWidth="700">
     <DockPanel LastChildFill="True">
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
@@ -27,6 +27,10 @@
                     <ComboBoxItem>LtSpice</ComboBoxItem>
                 </ComboBox>
                 <Separator />
+                <Label>Max degree of parallelism</Label>
+                <Slider Name="slValue" Value="{Binding MaxDegreeOfParallelism}" Width="100" TickFrequency="1" Minimum="1" Maximum="12" IsSnapToTickEnabled="True" TickPlacement="BottomRight" VerticalAlignment="Top"/>
+                <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Separator/>
                 <Button Command="{Binding RunSimulation}" ToolTip="Runs simulation.">
                     Run ☇
                 </Button>

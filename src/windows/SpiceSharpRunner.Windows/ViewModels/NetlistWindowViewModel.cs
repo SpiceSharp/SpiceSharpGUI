@@ -44,6 +44,8 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
+        public int MaxDegreeOfParallelism { get; set; } = 1;
+
         private string _netlist;
         public string Netlist
         {
@@ -144,6 +146,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
             netlistWindow.Title = "Results - " + Title;
             netlistWindow.Netlist = Netlist;
             netlistWindow.Mode = (SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode)SelectedMode;
+            netlistWindow.MaxDegreeOfParallelism = MaxDegreeOfParallelism;
             netlistWindow.Run();
             this.Windows.Add(netlistWindow);
         }

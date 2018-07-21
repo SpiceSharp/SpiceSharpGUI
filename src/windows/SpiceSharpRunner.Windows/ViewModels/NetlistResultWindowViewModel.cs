@@ -10,7 +10,9 @@ using SpiceSharpRunner.Windows.Logic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,6 +45,20 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
     public class NetlistResultWindowViewModel : ViewModelBase, IContent
     {
+        private TabsViewModel _plots;
+        private ObservableCollection<UIElement> _prints;
+        private TreeViewModel _internals;
+        private string _status;
+        private bool _plotsEnabled;
+        private ObservableCollection<SimulationStatistics> _stats = new ObservableCollection<SimulationStatistics>();
+        private ObservableCollection<SummarySimulationStatistics> _summaryStats = new ObservableCollection<SummarySimulationStatistics>();
+        private string _logs;
+
+        public NetlistResultWindowViewModel(Dispatcher dispatcher)
+        {
+            Dispatcher = dispatcher;
+        }
+
         public string Title { get; set; }
 
         public bool CanClose => true;
@@ -51,7 +67,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
         public string Netlist { get; set; }
 
-        private TabsViewModel _plots;
         public TabsViewModel Plots
         {
             get
@@ -66,7 +81,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
-        private ObservableCollection<UIElement> _prints;
         public ObservableCollection<UIElement> Prints
         {
             get
@@ -81,7 +95,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
-        private TreeViewModel _internals;
         public TreeViewModel Internals
         {
             get
@@ -96,7 +109,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
-        private string _status;
         public string Status
         {
             get
@@ -111,7 +123,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
-        private bool _plotsEnabled;
         public bool PlotsEnabled
         {
             get
@@ -125,8 +136,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
                 RaisePropertyChanged("PlotsEnabled");
             }
         }
-
-        private ObservableCollection<SimulationStatistics> _stats = new ObservableCollection<SimulationStatistics>();
 
         public ObservableCollection<SimulationStatistics> Stats
         {
@@ -142,7 +151,21 @@ namespace SpiceSharpRunner.Windows.ViewModels
             }
         }
 
-        private string _logs;
+        public ObservableCollection<SummarySimulationStatistics> SummaryStats
+        {
+            get
+            {
+                return _summaryStats;
+            }
+
+            set
+            {
+                _summaryStats = value;
+                RaisePropertyChanged("SummaryStats");
+            }
+        }
+
+
         public string Logs
         {
             get
@@ -158,11 +181,20 @@ namespace SpiceSharpRunner.Windows.ViewModels
         }
 
         public Dispatcher Dispatcher { get; }
-        public SpiceEvaluatorMode Mode { get; internal set; }
 
-        public NetlistResultWindowViewModel(Dispatcher dispatcher)
+        public SpiceEvaluatorMode Mode { get; set; }
+
+        public int MaxDegreeOfParallelism { get; set; }
+
+        /// <summary>
+        /// Runs
+        /// </summary>
+        public void Run()
         {
-            Dispatcher = dispatcher;
+            Task.Run(() =>
+            {
+                RunSimulations();
+            });
         }
 
         private void RunSimulations()
@@ -179,13 +211,37 @@ namespace SpiceSharpRunner.Windows.ViewModels
                 var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode);
 
                 Logs += $"Simulations found: {model.Simulations.Count}\n";
+                int simulationNo = 0;
 
-                int simulationNo = 1;
-                foreach (BaseSimulation simulation in model.Simulations)
+                Stopwatch simulationsWatch = new Stopwatch();
+                simulationsWatch.Start();
+                Parallel.ForEach<Simulation>(
+                    model.Simulations, 
+                    new ParallelOptions() { MaxDegreeOfParallelism = MaxDegreeOfParallelism }, simulation => RunSimulation(model, (BaseSimulation)simulation, Interlocked.Increment(ref simulationNo)));
+                simulationsWatch.Stop();
+
+                // Generate summary statistics
+                Dispatcher.Invoke(() =>
                 {
-                    RunSimulation(model, simulation, simulationNo);
-                    simulationNo++;
-                }
+                    var summary = new SummarySimulationStatistics();
+
+                    foreach (var stat in Stats)
+                    {
+                        summary.Iterations += stat.Iterations;
+                        summary.SolveTime += stat.SolveTime;
+                        summary.LoadTime += stat.LoadTime;
+                        summary.ReorderTime += stat.ReorderTime;
+                        summary.BehaviorCreationTime += stat.BehaviorCreationTime;
+                        summary.Timepoints += stat.Timepoints;
+                        summary.TransientIterations += stat.TransientIterations;
+                        summary.TransientTime += stat.TransientTime;
+                        summary.AcceptedTimepoints += stat.AcceptedTimepoints;
+                        summary.RejectedTimepoints += stat.RejectedTimepoints;
+                    }
+                    summary.TotalSimulationsTime = simulationsWatch.ElapsedMilliseconds;
+
+                    SummaryStats.Add(summary);
+                });
 
                 // Generate plots
                 if (model.Plots.Count > 0)
@@ -225,7 +281,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        Logs += ("Warning: " + warning + "\n");
+                        Logs += "Warning: " + warning + "\n";
                     });
                 }
 
@@ -310,17 +366,6 @@ namespace SpiceSharpRunner.Windows.ViewModels
             Dispatcher.Invoke(() =>
             {
                 Stats.Add(simulationStats);
-            });
-        }
-
-        /// <summary>
-        /// Runs
-        /// </summary>
-        public void Run()
-        {
-            Task.Run(() =>
-            {
-                RunSimulations();
             });
         }
     }

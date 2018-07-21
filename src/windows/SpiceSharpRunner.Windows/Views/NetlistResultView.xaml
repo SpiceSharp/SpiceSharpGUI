@@ -83,7 +83,7 @@
                     </TabControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Stats">
+            <TabItem Header="Simulation statistics">
                     <DataGrid
                       ItemsSource="{Binding Stats}"
                       IsReadOnly="True"
@@ -94,6 +94,18 @@
                       VerticalScrollBarVisibility="Auto"
                       HorizontalAlignment="Stretch">
                     </DataGrid>
+            </TabItem>
+            <TabItem Header="Summary statistics">
+                <DataGrid
+                      ItemsSource="{Binding SummaryStats}"
+                      IsReadOnly="True"
+                      IsTextSearchEnabled="True"
+                      SelectionUnit="CellOrRowHeader"
+                      ClipboardCopyMode="IncludeHeader"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalAlignment="Stretch">
+                </DataGrid>
             </TabItem>
         </TabControl>
     </DockPanel>
