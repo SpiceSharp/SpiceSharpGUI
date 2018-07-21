@@ -12,19 +12,19 @@ namespace SpiceSharpRunner.Windows.Controls
     /// <summary>
     /// Interaction logic for PlotControl.xaml
     /// </summary>
-    public partial class PlotControl : UserControl
+    public partial class XyPlotControl : UserControl
     {
-        public PlotControl()
+        public XyPlotControl()
         {
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty PlotProperty = DependencyProperty.Register("Plot", typeof(SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot), typeof(PlotControl),
+        public static readonly DependencyProperty PlotProperty = DependencyProperty.Register("Plot", typeof(SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot), typeof(XyPlotControl),
                         new PropertyMetadata(OnPlotPropertyChanged));
 
-        public SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot Plot
+        public SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot Plot
         {
-            get { return GetValue(PlotProperty) as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot; }
+            get { return GetValue(PlotProperty) as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot; }
             set
             {
                 SetValue(PlotProperty, value);
@@ -48,22 +48,22 @@ namespace SpiceSharpRunner.Windows.Controls
 
         private static void OnPlotPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((PlotControl)d).Plot = e.NewValue as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.Plot;
-            ((PlotControl)d).DataBind();
+            ((XyPlotControl)d).Plot = e.NewValue as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot;
+            ((XyPlotControl)d).DataBind();
         }
 
         private void DataBind()
         {
             if (Plot != null)
             {
-                PlotViewModel model = new PlotViewModel(Plot);
+                XyPlotViewModel model = new XyPlotViewModel(Plot);
                 this.DataContext = model;
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var series in ((PlotViewModel)this.DataContext).Series)
+            foreach (var series in ((XyPlotViewModel)this.DataContext).Series)
             {
                 series.Selected = false;
             }
@@ -71,7 +71,7 @@ namespace SpiceSharpRunner.Windows.Controls
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var series in ((PlotViewModel)this.DataContext).Series)
+            foreach (var series in ((XyPlotViewModel)this.DataContext).Series)
             {
                 series.Selected = true;
             }
@@ -87,7 +87,7 @@ namespace SpiceSharpRunner.Windows.Controls
             if (dialog.ShowDialog() == true)
             {
                 var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
-                pngExporter.ExportToFile(((PlotViewModel)this.DataContext).OxyPlotModel, dialog.FileName);
+                pngExporter.ExportToFile(((XyPlotViewModel)this.DataContext).OxyPlotModel, dialog.FileName);
                 MessageBox.Show("Saved", "SpiceSharpRunner");
             }
 

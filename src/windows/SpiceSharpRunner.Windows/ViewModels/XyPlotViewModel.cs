@@ -8,11 +8,11 @@ using System.Windows.Media;
 
 namespace SpiceSharp.Runner.Windows.ViewModels
 {
-    public class PlotViewModel
+    public class XyPlotViewModel
     {
         private Random rand;
 
-        public PlotViewModel(Plot plot)
+        public XyPlotViewModel(XyPlot plot)
         {
             rand = new Random(Environment.TickCount);
 
@@ -92,7 +92,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
         /// Creates Oxyplot library plot model
         /// </summary>
         /// <returns></returns>
-        private PlotModel CreateOxyPlotModel(Plot plot)
+        private PlotModel CreateOxyPlotModel(XyPlot plot)
         {
             var tmp = new PlotModel { Title = plot.Name };
             tmp.IsLegendVisible = ShowLegend;
@@ -147,7 +147,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
             return tmp;
         }
 
-        private void CreateAxis(Plot plot, PlotModel tmp)
+        private void CreateAxis(XyPlot plot, PlotModel tmp)
         {
             if (plot.Series.Count > 0)
             {

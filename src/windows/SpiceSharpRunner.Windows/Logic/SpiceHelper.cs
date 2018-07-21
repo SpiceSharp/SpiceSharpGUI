@@ -24,7 +24,7 @@ namespace SpiceSharpRunner.Windows.Logic
             return parserResult.ReaderResult;
         }
 
-        public static bool IsPlotPositive(Plot plot)
+        public static bool IsPlotPositive(XyPlot plot)
         {
             for (var i = 0; i < plot.Series.Count; i++)
             {

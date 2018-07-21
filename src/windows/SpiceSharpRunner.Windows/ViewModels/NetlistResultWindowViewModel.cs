@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using SpiceSharp.Runner.Windows.Controls;
 using SpiceSharp.Runner.Windows.ViewModels;
 using SpiceSharp.Simulations;
 using SpiceSharpParser.ModelsReaders.Netlist.Spice;
@@ -244,22 +245,37 @@ namespace SpiceSharpRunner.Windows.ViewModels
                 });
 
                 // Generate plots
-                if (model.Plots.Count > 0)
+                if (model.XyPlots.Count > 0)
                 {
                     PlotsEnabled = true;
 
-                    Logs += $"Creating plots: {model.Plots.Count}\n";
+                    Logs += $"Creating plots: {model.XyPlots.Count}\n";
 
-                    if (model.Plots.Count > 0)
+                    if (model.XyPlots.Count > 0)
                     {
-                        foreach (var plot in model.Plots)
+                        foreach (var plot in model.XyPlots)
                         {
                             Dispatcher.Invoke(() =>
                             {
-                                Plots.Items.Add(new TabItem() { Header = plot.Name, Content = new PlotControl() { Plot = plot } });
+                                Plots.Items.Add(new TabItem() { Header = plot.Name, Content = new XyPlotControl() { Plot = plot } });
                             });
                         }
                     }
+                }
+
+                // Generate plots
+                if (model.MonteCarloResult.Enabled)
+                {
+                    PlotsEnabled = true;
+
+                    Logs += $"Creating monte carlo plot\n";
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        var plot = new HistogramPlotControl() { Data = model.MonteCarloResult };
+                        plot.DataBind();
+                        Plots.Items.Add(new TabItem() { Header = "Monte Carlo", Content = plot });
+                    });
                 }
 
                 Logs += $"Prints found: {model.Prints.Count}\n";

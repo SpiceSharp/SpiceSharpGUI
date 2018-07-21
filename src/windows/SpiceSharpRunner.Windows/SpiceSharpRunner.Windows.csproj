@@ -50,8 +50,8 @@
     <Reference Include="SpiceSharp, Version=2.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SpiceSharp.2.1.6\lib\net45\SpiceSharp.dll</HintPath>
     </Reference>
-    <Reference Include="SpiceSharpParser, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpiceSharp-Parser.1.0.5\lib\net45\SpiceSharpParser.dll</HintPath>
+    <Reference Include="SpiceSharpParser, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpiceSharp-Parser.1.0.6-beta\lib\net45\SpiceSharpParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -78,8 +78,11 @@
     <Compile Include="Common\Command.cs" />
     <Compile Include="Common\IContent.cs" />
     <Compile Include="Common\ViewModelBase.cs" />
-    <Compile Include="Controls\PlotControl.xaml.cs">
-      <DependentUpon>PlotControl.xaml</DependentUpon>
+    <Compile Include="Controls\HistogramPlotControl.xaml.cs">
+      <DependentUpon>HistogramPlotControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\XyPlotControl.xaml.cs">
+      <DependentUpon>XyPlotControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PrintControl.xaml.cs">
       <DependentUpon>PrintControl.xaml</DependentUpon>
@@ -88,7 +91,8 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\NetlistResultWindowViewModel.cs" />
     <Compile Include="ViewModels\NetlistWindowViewModel.cs" />
-    <Compile Include="ViewModels\PlotViewModel.cs" />
+    <Compile Include="ViewModels\HistogramPlotViewModel.cs" />
+    <Compile Include="ViewModels\XyPlotViewModel.cs" />
     <Compile Include="ViewModels\SummarySimulationStatistics.cs" />
     <Compile Include="ViewModels\SimulationStatistics.cs" />
     <Compile Include="Windows\AboutBox.cs">
@@ -106,7 +110,10 @@
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controls\PlotControl.xaml">
+    <Page Include="Controls\HistogramPlotControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\XyPlotControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
