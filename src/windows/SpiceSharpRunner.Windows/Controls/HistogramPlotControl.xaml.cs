@@ -24,8 +24,6 @@ namespace SpiceSharp.Runner.Windows.Controls
     {
         public MonteCarloResult Data { get; set; }
 
-        public int NumberOfBins { get; set; } = 10;
-
         public HistogramPlotControl()
         {
             InitializeComponent();
@@ -35,7 +33,7 @@ namespace SpiceSharp.Runner.Windows.Controls
         {
             if (Data != null)
             {
-                HistogramPlotViewModel model = new HistogramPlotViewModel(Data.GetMaxPlot(NumberOfBins));
+                HistogramPlotViewModel model = new HistogramPlotViewModel(Data);
                 this.DataContext = model;
             }
         }

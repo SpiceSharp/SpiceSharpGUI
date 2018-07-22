@@ -8,6 +8,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel Background="White" LastChildFill="true" VerticalAlignment="Stretch">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" >
+            <TextBlock>Number of bins:</TextBlock>
+            <Slider Width="200" Name="slValue" Maximum="100" Minimum="1" Value="{Binding Bins}" />
+            <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" Width="40" />
+            <Separator />
+            <TextBlock>XMin:</TextBlock>
+            <TextBox Width="150" Text="{Binding XMin, Mode=OneWay}" IsReadOnly="True" TextAlignment="Left" />
+            <TextBlock>XMax:</TextBlock>
+            <TextBox  Width="150" Text="{Binding XMax, Mode=OneWay}" IsReadOnly="True" TextAlignment="Left"  />
+        </StackPanel>
         <oxy:PlotView Background="Azure" Name="plot" MinHeight="200" DockPanel.Dock="Bottom" Model="{Binding Path=OxyPlotModel, UpdateSourceTrigger=PropertyChanged}"/>
     </DockPanel>
 </UserControl>
