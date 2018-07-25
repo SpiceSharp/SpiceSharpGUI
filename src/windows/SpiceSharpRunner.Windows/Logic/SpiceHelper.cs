@@ -7,7 +7,7 @@ namespace SpiceSharpRunner.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode)
+        public static SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode, int? randomSeed)
         {
             SpiceSharpParser.ParserFacade facade = new SpiceSharpParser.ParserFacade();
 
@@ -15,6 +15,7 @@ namespace SpiceSharpRunner.Windows.Logic
             settings.SpiceNetlistParserSettings.HasTitle = true;
             settings.SpiceNetlistParserSettings.IsNewlineRequired = true;
             settings.SpiceNetlistParserSettings.IsEndRequired = false;
+            settings.SpiceNetlistModelReaderSettings.EvaluatorRandomSeed = randomSeed;
             settings.SpiceNetlistModelReaderSettings.EvaluatorMode = evaluatorMode;
 
             settings.SpiceNetlistModelReaderSettings.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;

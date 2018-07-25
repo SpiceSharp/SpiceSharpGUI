@@ -187,6 +187,8 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
         public int MaxDegreeOfParallelism { get; set; }
 
+        public int? RandomSeed { get; set; }
+
         /// <summary>
         /// Runs
         /// </summary>
@@ -209,7 +211,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
                 Plots = new TabsViewModel();
                 Prints = new ObservableCollection<UIElement>();
 
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode);
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode, RandomSeed);
 
                 Logs += $"Simulations found: {model.Simulations.Count}\n";
                 int simulationNo = 0;

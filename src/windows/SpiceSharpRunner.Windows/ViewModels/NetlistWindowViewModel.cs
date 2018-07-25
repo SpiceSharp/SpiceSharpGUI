@@ -21,6 +21,8 @@ namespace SpiceSharpRunner.Windows.ViewModels
             RunSimulation = new Command(Run);
         }
 
+        public int? RandomSeed { get; set; }
+
         private bool _dirty;
         public bool Dirty
         {
@@ -145,6 +147,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
             NetlistResultWindowViewModel netlistWindow = new NetlistResultWindowViewModel(Dispatcher);
             netlistWindow.Title = "Results - " + Title;
             netlistWindow.Netlist = Netlist;
+            netlistWindow.RandomSeed = RandomSeed;
             netlistWindow.Mode = (SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions.SpiceEvaluatorMode)SelectedMode;
             netlistWindow.MaxDegreeOfParallelism = MaxDegreeOfParallelism;
             netlistWindow.Run();

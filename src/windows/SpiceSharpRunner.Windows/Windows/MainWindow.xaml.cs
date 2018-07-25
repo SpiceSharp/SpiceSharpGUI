@@ -27,8 +27,8 @@ namespace SpiceSharpRunner.Windows
         {
             var args = (MdiContainer.NewWindowEventArgs)e;
 
-            args.Window.Height = this.MdiContainer.ActualHeight / 2;
-            args.Window.Width = this.MdiContainer.ActualWidth / 2;
+            //args.Window.Height = this.MdiContainer.ActualHeight / 2;
+            //args.Window.Width = this.MdiContainer.ActualWidth / 2;
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)

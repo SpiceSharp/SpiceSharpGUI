@@ -13,7 +13,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
         public HistogramPlotViewModel(MonteCarloResult data)
         {
             PlotModel = data.GetPlot(Bins);
-            OxyPlotModel = CreateOxyPlotModel();
+            OxyPlotModel = CreateOxyPlotModel(ShowLabels);
             Data = data; 
         }
         protected MonteCarloResult Data { get; set; }
@@ -34,7 +34,24 @@ namespace SpiceSharp.Runner.Windows.ViewModels
                 _bins = value;
 
                 PlotModel = Data.GetPlot(Bins);
-                OxyPlotModel = CreateOxyPlotModel();
+                OxyPlotModel = CreateOxyPlotModel(ShowLabels);
+                RaisePropertyChanged("OxyPlotModel");
+            }
+        }
+
+        private bool _showLabels = true;
+        public bool ShowLabels
+        {
+            get
+            {
+                return _showLabels;
+            }
+            set
+            {
+                _showLabels = value;
+
+                PlotModel = Data.GetPlot(Bins);
+                OxyPlotModel = CreateOxyPlotModel(ShowLabels);
                 RaisePropertyChanged("OxyPlotModel");
             }
         }
@@ -61,7 +78,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
         /// Creates Oxyplot library plot model
         /// </summary>
         /// <returns></returns>
-        private PlotModel CreateOxyPlotModel()
+        private PlotModel CreateOxyPlotModel(bool showLabels)
         {
             var model = new PlotModel { Title = PlotModel.Name };
             model.IsLegendVisible = true;
@@ -72,10 +89,11 @@ namespace SpiceSharp.Runner.Windows.ViewModels
             {
                 if (PlotModel.Bins.ContainsKey(i + 1))
                 {
-                    items.Add(new Item() { Label = PlotModel.Bins[i + 1].Value.ToString("N5"), Value = PlotModel.Bins[i + 1].Count });
+                    items.Add(new Item() { Label = showLabels ? PlotModel.Bins[i + 1].Value.ToString("N5") : string.Empty, Value = PlotModel.Bins[i + 1].Count });
                 }
             }
 
+             
             model.Axes.Add(new CategoryAxis { Position = AxisPosition.Bottom, Unit = PlotModel.XUnit, ItemsSource = items, LabelField = "Label" });
             model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, MinimumPadding = 0, AbsoluteMinimum = 0 });
             model.Series.Add(new ColumnSeries { Title = "Count", ItemsSource = items, ValueField = "Value" });

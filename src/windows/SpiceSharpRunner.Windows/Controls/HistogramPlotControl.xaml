@@ -17,6 +17,8 @@
             <TextBox Width="150" Text="{Binding XMin, Mode=OneWay}" IsReadOnly="True" TextAlignment="Left" />
             <TextBlock>XMax:</TextBlock>
             <TextBox  Width="150" Text="{Binding XMax, Mode=OneWay}" IsReadOnly="True" TextAlignment="Left"  />
+            <TextBlock>Show labels:</TextBlock>
+            <CheckBox IsChecked="{Binding ShowLabels}" />
         </StackPanel>
         <oxy:PlotView Background="Azure" Name="plot" MinHeight="200" DockPanel.Dock="Bottom" Model="{Binding Path=OxyPlotModel, UpdateSourceTrigger=PropertyChanged}"/>
     </DockPanel>
