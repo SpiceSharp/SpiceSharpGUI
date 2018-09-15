@@ -1,4 +1,5 @@
-﻿using SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions;
+﻿using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.CustomFunctions;
 using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.ViewModels;
 using System;

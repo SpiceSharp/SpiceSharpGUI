@@ -1,7 +1,7 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Logic;
 using System;
 using System.Windows.Media;

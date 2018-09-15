@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Runner.Windows.Windows;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Prints;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Prints;
 using System;
 using System.Collections;
 using System.Collections.Generic;

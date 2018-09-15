@@ -1,28 +1,26 @@
-﻿using SpiceSharpParser.ModelsReaders.Netlist.Spice;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
-using System;
+﻿using System;
+using SpiceSharpParser;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
 
 namespace SpiceSharpRunner.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode, int? randomSeed)
+        public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode, int? randomSeed)
         {
-            SpiceSharpParser.ParserFacade facade = new SpiceSharpParser.ParserFacade();
+            var parser = new SpiceParser();
+            parser.Settings = new SpiceParserSettings();
+            parser.Settings.NetlistParser.HasTitle = true;
+            parser.Settings.NetlistParser.IsNewlineRequired = true;
+            parser.Settings.NetlistParser.IsEndRequired = false;
+            parser.Settings.NetlistReader.Seed = randomSeed;
+            parser.Settings.NetlistReader.EvaluatorMode = evaluatorMode;
+            parser.Settings.NetlistReader.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;
+            parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
 
-            var settings = new SpiceSharpParser.ParserSettings();
-            settings.SpiceNetlistParserSettings.HasTitle = true;
-            settings.SpiceNetlistParserSettings.IsNewlineRequired = true;
-            settings.SpiceNetlistParserSettings.IsEndRequired = false;
-            settings.SpiceNetlistModelReaderSettings.EvaluatorRandomSeed = randomSeed;
-            settings.SpiceNetlistModelReaderSettings.EvaluatorMode = evaluatorMode;
-
-            settings.SpiceNetlistModelReaderSettings.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;
-            settings.WorkingDirectoryPath = Environment.CurrentDirectory;
-            var parserResult = facade.ParseNetlist(netlist, settings);
-
-            return parserResult.ReaderResult;
+            var parserResult = parser.ParseNetlist(netlist);
+            return parserResult.Result;
         }
 
         public static bool IsPlotPositive(XyPlot plot)

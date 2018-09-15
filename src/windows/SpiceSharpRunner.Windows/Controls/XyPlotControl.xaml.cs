@@ -2,7 +2,7 @@
 using OxyPlot;
 using OxyPlot.Wpf;
 using SpiceSharp.Runner.Windows.ViewModels;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Logic;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,12 +19,12 @@ namespace SpiceSharpRunner.Windows.Controls
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty PlotProperty = DependencyProperty.Register("Plot", typeof(SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot), typeof(XyPlotControl),
+        public static readonly DependencyProperty PlotProperty = DependencyProperty.Register("Plot", typeof(SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot), typeof(XyPlotControl),
                         new PropertyMetadata(OnPlotPropertyChanged));
 
-        public SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot Plot
+        public SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot Plot
         {
-            get { return GetValue(PlotProperty) as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot; }
+            get { return GetValue(PlotProperty) as SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot; }
             set
             {
                 SetValue(PlotProperty, value);
@@ -48,7 +48,7 @@ namespace SpiceSharpRunner.Windows.Controls
 
         private static void OnPlotPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((XyPlotControl)d).Plot = e.NewValue as SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot;
+            ((XyPlotControl)d).Plot = e.NewValue as SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots.XyPlot;
             ((XyPlotControl)d).DataBind();
         }
 
