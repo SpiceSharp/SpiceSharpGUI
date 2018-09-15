@@ -1,8 +1,8 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Simulations;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Simulations;
 using SpiceSharpRunner.Windows.Common;
 using System.Collections.Generic;
 

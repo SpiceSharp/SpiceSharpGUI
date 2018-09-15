@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Prints;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Prints;
 using System;
 using System.Collections.Generic;
 using System.Linq;

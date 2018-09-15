@@ -2,9 +2,10 @@
 using SpiceSharp.Runner.Windows.Controls;
 using SpiceSharp.Runner.Windows.ViewModels;
 using SpiceSharp.Simulations;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Evaluation.CustomFunctions;
-using SpiceSharpParser.ModelsReaders.Netlist.Spice.Readers.Controls.Plots;
+using SpiceSharpParser.ModelReaders.Netlist.Spice;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.CustomFunctions;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.Controls;
 using SpiceSharpRunner.Windows.Logic;
@@ -315,7 +316,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
         private void RunSimulation(SpiceNetlistReaderResult model, BaseSimulation simulation, int index)
         {
             // Setup for Internals tab
-            simulation.FinalizeSimulationExport += (arg, e) => {
+            simulation.AfterExecute += (arg, e) => {
                 Dispatcher.Invoke(() =>
                 {
                     TreeViewItem simulationItem = new TreeViewItem() { Header = simulation.Name };
@@ -355,7 +356,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
                     foreach (var parameter in model.Evaluators[simulation].GetParameterNames())
                     {
-                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, model.Evaluators[simulation].GetParameterValue(parameter, simulation)) };
+                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, model.Evaluators[simulation].GetParameterValue(parameter)) };
                         parameters.Items.Add(item);
                     }
 
