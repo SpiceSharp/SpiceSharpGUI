@@ -10,13 +10,12 @@ namespace SpiceSharpRunner.Windows.Logic
         public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode, int? randomSeed)
         {
             var parser = new SpiceParser();
-            parser.Settings = new SpiceParserSettings();
-            parser.Settings.NetlistParser.HasTitle = true;
-            parser.Settings.NetlistParser.IsNewlineRequired = true;
-            parser.Settings.NetlistParser.IsEndRequired = false;
-            parser.Settings.NetlistReader.Seed = randomSeed;
-            parser.Settings.NetlistReader.EvaluatorMode = evaluatorMode;
-            parser.Settings.NetlistReader.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;
+            parser.Settings.Parsing.HasTitle = true;
+            parser.Settings.Parsing.IsNewlineRequired = true;
+            parser.Settings.Parsing.IsEndRequired = false;
+            parser.Settings.Reading.Seed = randomSeed;
+            parser.Settings.Reading.EvaluatorMode = evaluatorMode;
+            parser.Settings.Reading.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;
             parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
 
             var parserResult = parser.ParseNetlist(netlist);

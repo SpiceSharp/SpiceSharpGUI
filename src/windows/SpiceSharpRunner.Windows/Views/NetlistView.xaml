@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:SpiceSharpRunner.Windows"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
-        d:DesignHeight="600" d:DesignWidth="800">
+        d:DesignHeight="600" Width="679.75">
     <DockPanel LastChildFill="True">
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
@@ -28,7 +28,7 @@
                     Run ☇
                 </Button>
                 <Separator/>
-                <Label>Evaluator mode:</Label>
+                <Label Content="Expression mode"/>
                 <ComboBox Name="mode2" SelectedIndex="{Binding SelectedMode}">
                     <ComboBoxItem IsSelected="True">Spice3f5</ComboBoxItem>
                     <ComboBoxItem>SmartSpice</ComboBoxItem>
@@ -37,7 +37,7 @@
                 </ComboBox>
                 <Separator />
                 <Label>Max degree of parallelism</Label>
-                <Slider Name="slValue2" Value="{Binding MaxDegreeOfParallelism}" Width="100" TickFrequency="1" Minimum="1" Maximum="12" IsSnapToTickEnabled="True" TickPlacement="BottomRight" VerticalAlignment="Top"/>
+                <Slider Name="slValue2" Value="{Binding MaxDegreeOfParallelism}" Width="48" TickFrequency="1" Minimum="1" Maximum="12" IsSnapToTickEnabled="True" TickPlacement="BottomRight" VerticalAlignment="Top"/>
                 <TextBox Text="{Binding ElementName=slValue2, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
                 <Separator />
                 <Label>Netlist random seed</Label>
