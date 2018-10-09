@@ -40,9 +40,15 @@
                     <TextBox Name="txtLogs" IsReadOnly="True" Text="{Binding Logs}" ScrollViewer.VerticalScrollBarVisibility="Visible" AcceptsReturn="True" />
                 </DockPanel>
             </TabItem>
-            <TabItem Name="PrintsTab" Header="Prints">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <TabItem Name="PrintsTab" Header="Prints" >
                     <ItemsControl ItemsSource="{Binding Prints}">
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                    </ItemsControl.Template>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -59,8 +65,6 @@
                             </Style>
                         </ItemsControl.ItemContainerStyle>
                     </ItemsControl>
-                    
-                </ScrollViewer>
             </TabItem>
             <TabItem Header="Plots" Name="PlotsTab">
                 <TabItem.Style>
