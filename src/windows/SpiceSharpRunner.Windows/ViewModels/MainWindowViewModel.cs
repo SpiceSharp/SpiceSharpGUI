@@ -1,14 +1,9 @@
 ﻿using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
-using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.CustomFunctions;
 using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace SpiceSharp.Runner.Windows.ViewModels
@@ -16,14 +11,12 @@ namespace SpiceSharp.Runner.Windows.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         public ObservableCollection<IContent> Windows { get; private set; }
-
-
         public Command NewNetlistCommand { get; }
         public Command OpenNetlistCommand { get; }
         public Command SaveNetlistCommand { get; }
         public Command RunSimulationCommand { get; }
-
         private IContent _selectedWindow = null;
+
         public IContent SelectedWindow
         {
             get
