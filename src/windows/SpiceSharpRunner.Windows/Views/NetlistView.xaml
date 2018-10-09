@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:SpiceSharpRunner.Windows"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
-        d:DesignHeight="600" Width="679.75">
+        d:DesignHeight="600" d:DesignWidth="679.75">
     <DockPanel LastChildFill="True">
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>

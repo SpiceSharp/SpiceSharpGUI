@@ -10,7 +10,7 @@ namespace SpiceSharpRunner.Windows.Logic
         public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode, int? randomSeed)
         {
             var parser = new SpiceParser();
-            parser.Settings.Parsing.HasTitle = true;
+            parser.Settings.Lexing.HasTitle = true;
             parser.Settings.Parsing.IsNewlineRequired = true;
             parser.Settings.Parsing.IsEndRequired = false;
             parser.Settings.Reading.Seed = randomSeed;
@@ -19,7 +19,7 @@ namespace SpiceSharpRunner.Windows.Logic
             parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
 
             var parserResult = parser.ParseNetlist(netlist);
-            return parserResult.Result;
+            return parserResult.SpiceSharpModel;
         }
 
         public static bool IsPlotPositive(XyPlot plot)

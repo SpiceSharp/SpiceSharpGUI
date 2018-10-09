@@ -4,16 +4,12 @@ using SpiceSharp.Runner.Windows.ViewModels;
 using SpiceSharp.Simulations;
 using SpiceSharpParser.ModelReaders.Netlist.Spice;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
-using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.CustomFunctions;
-using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
 using SpiceSharpRunner.Windows.Common;
 using SpiceSharpRunner.Windows.Controls;
 using SpiceSharpRunner.Windows.Logic;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -354,7 +350,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
                     TreeViewItem parameters = new TreeViewItem() { Header = "Parameters" };
                     simulationItem.Items.Add(parameters);
 
-                    foreach (var parameter in model.Evaluators[simulation].GetParameterNames())
+                    foreach (var parameter in model.Evaluators[simulation].Parameters.Keys)
                     {
                         TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, model.Evaluators[simulation].GetParameterValue(parameter)) };
                         parameters.Items.Add(item);
