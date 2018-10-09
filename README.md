@@ -12,4 +12,7 @@
  * Plots (thanks to OxyPlot library) with ability to export to PNG, BMP
  * Simulation internals views
  
+ ## Screenshots
+ ![Screen](/screenshots/screen01.png)
+ ![Screen](/screenshots/screen02.png)
  
