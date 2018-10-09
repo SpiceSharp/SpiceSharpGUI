@@ -1,9 +1,13 @@
-# SpiceSharpRunner (in development)
-## Current state:
-### For Windows:
-![Screen](/screenshots/screen1.PNG)
-![Screen](/screenshots/screen2.PNG)
-![Screen](/screenshots/screen3.PNG)
-
-### Portable:
-![Screen](/screenshots/screen_portable.PNG)
+# <img src="https://spicesharp.github.io/SpiceSharp/api/images/logo_full.svg" width="45px" /> Spice#/SpiceSharpRunner
+ SpiceSharpRunner is a Spice simulation environment built with SpiceSharp and SpiceSharpParser.
+ 
+ There are two versions:
+ * For Windows (built with WPF)
+ * Portable  (build with Avalonia)
+ 
+ 
+ ## Features
+ * Netlist text editor
+ * MDI
+ * Plots (thanks to OxyPlot library)
+ 
