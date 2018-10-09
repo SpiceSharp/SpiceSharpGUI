@@ -9,5 +9,7 @@
  ## Features
  * Netlist text editor
  * MDI
- * Plots (thanks to OxyPlot library)
+ * Plots (thanks to OxyPlot library) with ability to export to PNG, BMP
+ * Simulation internals views
+ 
  
