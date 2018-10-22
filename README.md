@@ -1,4 +1,4 @@
-# <img src="https://spicesharp.github.io/SpiceSharp/api/images/logo_full.svg" width="45px" /> Spice#/SpiceSharpRunner
+# <img src="https://spicesharp.github.io/SpiceSharp/api/images/logo_full.svg" width="45px" /> Spice#/SpiceSharpGUI
  SpiceSharpGUI is a Spice simulation environment built with SpiceSharp and SpiceSharpParser.
  
  There are two versions:
