@@ -180,7 +180,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
 
         public Dispatcher Dispatcher { get; }
 
-        public SpiceEvaluatorMode Mode { get; set; }
+        public SpiceExpressionMode Mode { get; set; }
 
         public int MaxDegreeOfParallelism { get; set; }
 
@@ -347,14 +347,14 @@ namespace SpiceSharpRunner.Windows.ViewModels
                         variables.Items.Add(item);
                     }
 
-                    TreeViewItem parameters = new TreeViewItem() { Header = "Parameters" };
+                    /*TreeViewItem parameters = new TreeViewItem() { Header = "Parameters" };
                     simulationItem.Items.Add(parameters);
 
                     foreach (var parameter in model.Evaluators[simulation].Parameters.Keys)
                     {
                         TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, model.Evaluators[simulation].GetParameterValue(parameter)) };
                         parameters.Items.Add(item);
-                    }
+                    }*/
 
                     this.Internals.Items.Add(new TreeItem() { Content = simulationItem });
                 });

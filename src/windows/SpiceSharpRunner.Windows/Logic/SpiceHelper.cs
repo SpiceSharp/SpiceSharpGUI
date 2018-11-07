@@ -7,15 +7,15 @@ namespace SpiceSharpRunner.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceEvaluatorMode evaluatorMode, int? randomSeed)
+        public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceExpressionMode evaluatorMode, int? randomSeed)
         {
             var parser = new SpiceParser();
             parser.Settings.Lexing.HasTitle = true;
-            parser.Settings.Parsing.IsNewlineRequired = true;
+            parser.Settings.Parsing.IsNewlineRequired = false;
             parser.Settings.Parsing.IsEndRequired = false;
             parser.Settings.Reading.Seed = randomSeed;
             parser.Settings.Reading.EvaluatorMode = evaluatorMode;
-            parser.Settings.Reading.EvaluatorMode = SpiceEvaluatorMode.Spice3f5;
+            parser.Settings.Reading.EvaluatorMode = SpiceExpressionMode.Spice3f5;
             parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
 
             var parserResult = parser.ParseNetlist(netlist);

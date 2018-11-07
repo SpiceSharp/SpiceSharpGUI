@@ -148,7 +148,7 @@ namespace SpiceSharpRunner.Windows.ViewModels
             netlistWindow.Title = "Results - " + Title;
             netlistWindow.Netlist = Netlist;
             netlistWindow.RandomSeed = RandomSeed;
-            netlistWindow.Mode = (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceEvaluatorMode)SelectedMode;
+            netlistWindow.Mode = (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode;
             netlistWindow.MaxDegreeOfParallelism = MaxDegreeOfParallelism;
             netlistWindow.Run();
             this.Windows.Add(netlistWindow);
