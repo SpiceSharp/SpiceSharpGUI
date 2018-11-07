@@ -91,7 +91,7 @@ namespace SpiceSharp.Runner.Windows.ViewModels
                 NetlistResultWindowViewModel netlistWindow = new NetlistResultWindowViewModel(Dispatcher);
                 netlistWindow.Title = "Results for: " + n.Title;
                 netlistWindow.Netlist = n.Netlist;
-                netlistWindow.Mode = (SpiceEvaluatorMode)n.SelectedMode;
+                netlistWindow.Mode = (SpiceExpressionMode)n.SelectedMode;
                 netlistWindow.Run();
                 this.Windows.Add(netlistWindow);
             }
