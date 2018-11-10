@@ -1,4 +1,5 @@
 ﻿using SpiceSharpGUI.Windows.Common;
+using SpiceSharpGUI.Windows.Logic;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -19,6 +20,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             Title = path != null ? "Netlist: " + path : "Netlist: unsaved";
             CloseCommand = new Command(CloseWindow);
             RunSimulation = new Command(Run);
+            ParseCommand = new Command(Parse);
         }
 
         public int? RandomSeed { get; set; }
@@ -124,6 +126,8 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
         public Command CloseCommand { get; }
 
+        public Command ParseCommand { get; }
+
         public Command RunSimulation { get; }
 
         public bool IsResizable { get; set; } = true;
@@ -141,6 +145,18 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
+        private void Parse(object obj)
+        {
+            try
+            {
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed);
+                MessageBox.Show("Parsing was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Parsing failed: " + ex.ToString(), "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void Run(object obj)
         {

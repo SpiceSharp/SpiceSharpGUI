@@ -27,6 +27,9 @@
                 <Button Command="{Binding RunSimulation}" ToolTip="Runs simulation." FontWeight="Bold">
                     Run ☇
                 </Button>
+                <Button Command="{Binding ParseCommand}" ToolTip="Parse netlist.">
+                    Parse
+                </Button>
                 <Separator/>
                 <Label Content="Expression mode"/>
                 <ComboBox Name="mode2" SelectedIndex="{Binding SelectedMode}">
