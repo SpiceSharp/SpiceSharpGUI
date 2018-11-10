@@ -1,0 +1,51 @@
+﻿<Window x:Class="SpiceSharpGUI.Windows.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mdi="clr-namespace:Hammer.MDIContainer.Control;assembly=Hammer.MDIContainer.Control"
+        mc:Ignorable="d"
+        Title="SpiceSharpGUI" Height="650" Width="900">
+    <DockPanel Height="Auto" Name="stackPanel1" Width="Auto" LastChildFill="True">
+        <Menu IsMainMenu="True" DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding NewNetlistCommand}"/>
+                <MenuItem Header="_Open" Command="{Binding OpenNetlistCommand}"/>
+                <MenuItem Header="_Save" Command="{Binding SaveNetlistCommand}"/>
+                <Separator />
+                <MenuItem Header="_Set working directory" Click="MenuItem_Click_1"/>
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Simulation">
+                <MenuItem Header="_Run"  Command="{Binding RunSimulationCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_Window">
+                <MenuItem Header="_Tile Vertically" Click="MenuItem_Click_2"/>
+                <MenuItem Header="_Tile Horizontally" Click="MenuItem_Click_3"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="MenuItem_Click" />
+            </MenuItem>
+        </Menu>
+        <StatusBar Width="Auto" DockPanel.Dock="Bottom" Height="20">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" />
+            </StatusBarItem>
+        </StatusBar>
+        <DockPanel Height="Auto" Name="stackPanel2" Width="Auto" >
+            <mdi:MdiContainer Name="MdiContainer" Grid.Column="1" Margin="4" ItemsSource="{Binding Windows}" SelectedItem="{Binding SelectedWindow, Mode=TwoWay}">
+                <mdi:MdiContainer.Resources>
+                    <Style TargetType="{x:Type mdi:MdiWindow}">
+                        <Setter Property="Title" Value="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                        <Setter Property="CanClose" Value="{Binding CanClose, UpdateSourceTrigger=PropertyChanged}" />
+                        <Setter Property="IsResizable" Value="{Binding IsResizable, UpdateSourceTrigger=PropertyChanged}" />
+                    </Style>
+                </mdi:MdiContainer.Resources>
+            </mdi:MdiContainer>
+        </DockPanel>
+    </DockPanel>
+    <Window.InputBindings>
+            <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveNetlistCommand}"/>
+    </Window.InputBindings>
+</Window>

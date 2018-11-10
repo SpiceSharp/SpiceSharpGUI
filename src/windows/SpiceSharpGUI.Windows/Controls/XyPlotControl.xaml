@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="SpiceSharpGUI.Windows.Controls.XyPlotControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpiceSharpGUI.Windows.Controls"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="599.306" d:DesignWidth="845.139">
+    <DockPanel Background="White" LastChildFill="true" VerticalAlignment="Stretch">
+        <DockPanel LastChildFill="False" DockPanel.Dock="Top" Background="Beige">
+            <Label DockPanel.Dock="Top">
+                <TextBlock TextDecorations="Underline">Options</TextBlock>
+            </Label>
+            <CheckBox Name="x" Width="170" IsChecked="{Binding XScaleLog}" Content="X-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
+            <CheckBox Name="y" Width="170" IsChecked="{Binding YScaleLog}" IsEnabled="{Binding YScaleLogEnabled}"  Content="Y-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
+            <CheckBox Name="legend"  IsChecked="{Binding ShowLegend}" Content="Show legend" Height="20" DockPanel.Dock="Left" />
+            <Button Name="save" Content="Export to BMP" DockPanel.Dock="Right"  Width="93" Margin="0,0,20,20" Click="save_Click"/>
+            <Button x:Name="save_png" Content="Export to PNG" DockPanel.Dock="Right"  Width="93" Margin="0,0,20,20" Click="save_png_Click"/>
+        </DockPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <oxy:PlotView Grid.Column="0" Background="Azure" Name="plot" MinHeight="200" DockPanel.Dock="Bottom" Model="{Binding Path=OxyPlotModel, UpdateSourceTrigger=PropertyChanged}"/>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+            <StackPanel Grid.Column="2" Grid.RowSpan="2">
+                <ItemsControl ItemsSource="{Binding Series}" Height="{Binding Path=ActualHeight,
+                       RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}}">
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="{x:Type ItemsControl}">
+                            <DockPanel>
+                                <Label FontSize="16" DockPanel.Dock="Top">
+                                    <WrapPanel Orientation="Horizontal">
+                                        <TextBlock Text="Traces count ="/>
+                                        <TextBlock Text="{Binding Count}"></TextBlock>
+                                    </WrapPanel>
+                                </Label>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" >
+                                    <Button Click="Button_Click" Margin="5">
+                                        Unselect all
+                                    </Button>
+                                    <Button Click="Button2_Click" Margin="5">
+                                        Select all
+                                    </Button>
+                                </StackPanel>
+                                <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <ItemsPresenter></ItemsPresenter>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Selected}">
+                                <WrapPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="{Binding Brush}">●</TextBlock>
+                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                </WrapPanel>
+                            </CheckBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>

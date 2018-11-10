@@ -1,0 +1,116 @@
+﻿<UserControl xmlns:Controls="clr-namespace:SpiceSharpGUI.Windows.Controls"  x:Class="SpiceSharpGUI.Windows.Views.NetlistResultView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpiceSharpGUI.Windows.Views"
+        mc:Ignorable="d"
+        d:DesignHeight="600" d:DesignWidth="600">
+    <DockPanel LastChildFill="True">
+        <StatusBar Width="Auto" DockPanel.Dock="Bottom" Height="20">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" Text="{Binding Status}" />
+            </StatusBarItem>
+        </StatusBar>
+        <TabControl Name="Tabs" DockPanel.Dock="Top">
+            <TabItem Header="Netlist">
+                <DockPanel Height="Auto" Name="NetlistPanel" Width="Auto" >
+                    <avalonEdit:TextEditor
+                            xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                            Name="txtNetlist"
+                            IsReadOnly="true"
+                            ShowLineNumbers="True"
+                            FontFamily="Consolas"
+                            FontSize="10pt"/>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Internals" Name="CircuitElementsPanelTab">
+                <DockPanel Height="Auto" Name="CircuitElementsPanel" Width="Auto" >
+                    <TreeView Name="CircuitElementsTreeView" ItemsSource="{Binding Path=Internals.Items}">
+                        <TreeView.ItemTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding Content}" />
+                            </DataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
+            </TabItem>
+            <TabItem Name="LogsTab" Header="Logs">
+                <DockPanel Height="Auto" Name="WarningsPanel" Width="Auto" >
+                    <TextBox Name="txtLogs" IsReadOnly="True" Text="{Binding Logs}" ScrollViewer.VerticalScrollBarVisibility="Visible" AcceptsReturn="True" />
+                </DockPanel>
+            </TabItem>
+            <TabItem Name="PrintsTab" Header="Prints" >
+                    <ItemsControl ItemsSource="{Binding Prints}">
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                    </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentControl Content="{Binding}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="FrameworkElement.Margin" Value="20"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+            </TabItem>
+            <TabItem Header="Plots" Name="PlotsTab">
+                <TabItem.Style>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="IsEnabled" Value="{Binding PlotsEnabled}"/>
+                    </Style>
+                </TabItem.Style>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <TabControl Name="PlotsTabs" ItemsSource="{Binding Path=Plots.Items}" SelectedItem="{Binding Path=Plots.Selected}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Header}"></TextBlock>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding Content}" />
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Simulation statistics">
+                    <DataGrid
+                      ItemsSource="{Binding Stats}"
+                      IsReadOnly="True"
+                      IsTextSearchEnabled="True"
+                      SelectionUnit="CellOrRowHeader"
+                      ClipboardCopyMode="IncludeHeader"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalAlignment="Stretch">
+                    </DataGrid>
+            </TabItem>
+            <TabItem Header="Summary statistics">
+                <DataGrid
+                      ItemsSource="{Binding SummaryStats}"
+                      IsReadOnly="True"
+                      IsTextSearchEnabled="True"
+                      SelectionUnit="CellOrRowHeader"
+                      ClipboardCopyMode="IncludeHeader"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalAlignment="Stretch">
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</UserControl>
