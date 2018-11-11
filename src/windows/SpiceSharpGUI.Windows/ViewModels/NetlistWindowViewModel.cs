@@ -19,8 +19,9 @@ namespace SpiceSharpGUI.Windows.ViewModels
             Path = path;
             Title = path != null ? "Netlist: " + path : "Netlist: unsaved";
             CloseCommand = new Command(CloseWindow);
-            RunSimulation = new Command(Run);
-            ParseCommand = new Command(Parse);
+            RunSimulation = new Command(Run, (obj) => !string.IsNullOrEmpty(Netlist));
+            ParseCommand = new Command(Parse, (obj) => !string.IsNullOrEmpty(Netlist));
+            ValidateCommand = new Command(Validate, (obj) => !string.IsNullOrEmpty(Netlist));
         }
 
         public int? RandomSeed { get; set; }
@@ -128,6 +129,8 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
         public Command ParseCommand { get; }
 
+        public Command ValidateCommand { get; }
+
         public Command RunSimulation { get; }
 
         public bool IsResizable { get; set; } = true;
@@ -150,11 +153,26 @@ namespace SpiceSharpGUI.Windows.ViewModels
             try
             {
                 var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed);
+                model.Circuit.Validate();
                 MessageBox.Show("Parsing was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Parsing failed: " + ex.ToString(), "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Parsing failed: " + ex, "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Validate(object obj)
+        {
+            try
+            {
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed);
+                model.Circuit.Validate();
+                MessageBox.Show("Validating was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Validating failed: " + ex, "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
