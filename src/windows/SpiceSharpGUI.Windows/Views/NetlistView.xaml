@@ -27,8 +27,11 @@
                 <Button Command="{Binding RunSimulation}" ToolTip="Runs simulation." FontWeight="Bold">
                     Run ☇
                 </Button>
-                <Button Command="{Binding ParseCommand}" ToolTip="Parse netlist.">
+                <Button Command="{Binding ParseCommand}" ToolTip="Parse">
                     Parse
+                </Button>
+                <Button Command="{Binding ValidateCommand}" ToolTip="Validate">
+                    Validate
                 </Button>
                 <Separator/>
                 <Label Content="Expression mode"/>
