@@ -153,7 +153,6 @@ namespace SpiceSharpGUI.Windows.ViewModels
             try
             {
                 var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed);
-                model.Circuit.Validate();
                 MessageBox.Show("Parsing was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
