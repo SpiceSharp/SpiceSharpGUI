@@ -13,6 +13,5 @@
  * Simulation internals views
  
  ## Screenshots
- ![Screen](/screenshots/screen01.png)
- ![Screen](/screenshots/screen02.PNG)
+ ![Screen](/screenshots/scrennshot03.PNG)
  
