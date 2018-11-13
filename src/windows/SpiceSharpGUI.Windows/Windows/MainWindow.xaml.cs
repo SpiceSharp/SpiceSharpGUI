@@ -25,7 +25,8 @@ namespace SpiceSharpGUI.Windows.Windows
         private void Container_NewWindow(object sender, System.EventArgs e)
         {
             var args = (MdiContainer.NewWindowEventArgs)e;
-            args.Window.Width = 500;
+            args.Window.Width = 650;
+            args.Window.Height = 500;
             args.Window.Position(0, 0);
         }
 
