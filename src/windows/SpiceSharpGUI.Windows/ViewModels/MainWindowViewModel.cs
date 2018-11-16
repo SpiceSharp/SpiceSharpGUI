@@ -43,7 +43,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
         private void OpenNetlist(object parameter)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            openFileDialog.Filter = "Circuit files (*.cir)|*.cir|Netlist files (*.net)|*.net|All files (*.*)|*.*";
+            openFileDialog.Filter = "Circuit files (*.cir)|*.cir|Netlist files (*.net)|*.net|Netlist library (*.lib)|*.lib|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
                 var content = File.ReadAllText(openFileDialog.FileName);
