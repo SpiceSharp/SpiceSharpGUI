@@ -3,7 +3,7 @@
  
  There are two versions:
  * For Windows (built with WPF)
- * Portable  (built with Avalonia)
+ * Portable  (built with Avalonia) (very limited)
  
  
  ## Features
