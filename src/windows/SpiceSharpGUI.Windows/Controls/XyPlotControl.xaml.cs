@@ -26,7 +26,6 @@ namespace SpiceSharpGUI.Windows.Controls
             set
             {
                 SetValue(PlotProperty, value);
-                //DataBind();
             }
         }
 
