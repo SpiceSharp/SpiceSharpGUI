@@ -88,6 +88,14 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
+        public string CountLabel
+        {
+            get
+            {
+                return Count > 1 ? " Traces" : " Trace";
+            }
+        }
+
         /// <summary>
         /// Creates Oxyplot library plot model
         /// </summary>

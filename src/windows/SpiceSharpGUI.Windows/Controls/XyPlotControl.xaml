@@ -8,15 +8,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="599.306" d:DesignWidth="845.139">
     <DockPanel Background="White" LastChildFill="true" VerticalAlignment="Stretch">
-        <DockPanel LastChildFill="False" DockPanel.Dock="Top" Background="Beige">
-            <Label DockPanel.Dock="Top">
-                <TextBlock TextDecorations="Underline">Options</TextBlock>
-            </Label>
-            <CheckBox Name="x" Width="170" IsChecked="{Binding XScaleLog}" Content="X-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
-            <CheckBox Name="y" Width="170" IsChecked="{Binding YScaleLog}" IsEnabled="{Binding YScaleLogEnabled}"  Content="Y-axis logarithmic scale" Height="20" DockPanel.Dock="Left" />
-            <CheckBox Name="legend"  IsChecked="{Binding ShowLegend}" Content="Show legend" Height="20" DockPanel.Dock="Left" />
-            <Button Name="save" Content="Export to BMP" DockPanel.Dock="Right"  Width="93" Margin="0,0,20,20" Click="save_Click"/>
-            <Button x:Name="save_png" Content="Export to PNG" DockPanel.Dock="Right"  Width="93" Margin="0,0,20,20" Click="save_png_Click"/>
+        <DockPanel LastChildFill="False" DockPanel.Dock="Top">
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar DockPanel.Dock="Top" >
+                    <DockPanel>
+                        <Label DockPanel.Dock="Left" FontWeight="Bold">Options:</Label>
+                        <CheckBox DockPanel.Dock="Left" Name="x" Width="170" IsChecked="{Binding XScaleLog}" Content="X-axis logarithmic scale" Height="20"/>
+                        <CheckBox DockPanel.Dock="Left" Name="y" Width="170" IsChecked="{Binding YScaleLog}" IsEnabled="{Binding YScaleLogEnabled}"  Content="Y-axis logarithmic scale"  Height="20" />
+                        <CheckBox DockPanel.Dock="Left" Name="legend"  IsChecked="{Binding ShowLegend}" Content="Show legend"  Height="20" />
+                    </DockPanel>
+                </ToolBar>
+            </ToolBarTray>
+            <ToolBarTray  DockPanel.Dock="Top">
+                <ToolBar  DockPanel.Dock="Top">
+                        <DockPanel>
+                            <Label FontWeight="Bold">Actions:</Label>
+                            <Button Name="save" Content="Export to BMP"  Width="93" Click="save_Click"/>
+                            <Button x:Name="save_png" Content="Export to PNG"  Width="93"  Click="save_png_Click"/>
+                        </DockPanel>
+               </ToolBar>
+            </ToolBarTray>
         </DockPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -37,8 +48,8 @@
                             <DockPanel>
                                 <Label FontSize="16" DockPanel.Dock="Top">
                                     <WrapPanel Orientation="Horizontal">
-                                        <TextBlock Text="Traces count ="/>
                                         <TextBlock Text="{Binding Count}"></TextBlock>
+                                        <TextBlock Text="{Binding CountLabel}"/>
                                     </WrapPanel>
                                 </Label>
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" >
