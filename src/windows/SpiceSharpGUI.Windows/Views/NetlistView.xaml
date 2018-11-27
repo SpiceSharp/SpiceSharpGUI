@@ -21,16 +21,16 @@
                 <Button Command="{Binding ValidateCommand}" ToolTip="Validate">
                     Validate
                 </Button>
-                
+                <Separator/>
+                <Label>Max degree of parallelism</Label>
+                <Slider Name="slValue2" Value="{Binding MaxDegreeOfParallelism}" Width="48" TickFrequency="1" Minimum="1" Maximum="12" IsSnapToTickEnabled="True" TickPlacement="BottomRight" VerticalAlignment="Top"/>
+                <TextBox Text="{Binding ElementName=slValue2, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Separator/>
             </ToolBar>
         </ToolBarTray>
        
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Label>Max degree of parallelism</Label>
-                <Slider Name="slValue2" Value="{Binding MaxDegreeOfParallelism}" Width="48" TickFrequency="1" Minimum="1" Maximum="12" IsSnapToTickEnabled="True" TickPlacement="BottomRight" VerticalAlignment="Top"/>
-                <TextBox Text="{Binding ElementName=slValue2, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                <Separator/>
                 <Label Content="Expression mode"/>
                 <ComboBox Name="mode2" SelectedIndex="{Binding SelectedMode}">
                     <ComboBoxItem IsSelected="True">Spice3f5</ComboBoxItem>
@@ -41,6 +41,12 @@
                 <Separator />
                 <Label>Netlist random seed</Label>
                 <xctk:IntegerUpDown Width="70" Minimum="0" Name="randomSeed" Value="{Binding RandomSeed}" />
+                <Separator />
+                <Grid>
+                    <CheckBox Name="hasTitle" IsChecked="{Binding HasTitle, Mode=TwoWay}" Margin="12,7,-12.2,-7.4" >
+                        First line of netlist is title
+                    </CheckBox>
+                </Grid>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Top">

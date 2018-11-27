@@ -93,6 +93,21 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
+        private bool _hasTitle = true;
+
+        public bool HasTitle
+        {
+            get
+            {
+                return _hasTitle;
+            }
+            set
+            {
+                _hasTitle = value;
+                RaisePropertyChanged("HasTitle");
+            }
+        }
+
         private int _selectedMode;
 
         public int SelectedMode
@@ -152,7 +167,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
         {
             try
             {
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed);
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed, HasTitle);
                 MessageBox.Show("Parsing was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -165,7 +180,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
         {
             try
             {
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed);
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed, HasTitle);
                 model.Circuit.Validate();
                 MessageBox.Show("Validating was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -181,6 +196,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             netlistWindow.Title = "Results - " + Title;
             netlistWindow.Netlist = Netlist;
             netlistWindow.RandomSeed = RandomSeed;
+            netlistWindow.HasTitle = HasTitle;
             netlistWindow.Mode = (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode;
             netlistWindow.MaxDegreeOfParallelism = MaxDegreeOfParallelism;
             netlistWindow.Run();
