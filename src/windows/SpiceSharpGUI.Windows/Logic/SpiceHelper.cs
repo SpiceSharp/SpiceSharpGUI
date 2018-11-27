@@ -7,10 +7,10 @@ namespace SpiceSharpGUI.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceExpressionMode evaluatorMode, int? randomSeed)
+        public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceExpressionMode evaluatorMode, int? randomSeed, bool hasTitle)
         {
             var parser = new SpiceParser();
-            parser.Settings.Lexing.HasTitle = true;
+            parser.Settings.Lexing.HasTitle = hasTitle;
             parser.Settings.Parsing.IsNewlineRequired = false;
             parser.Settings.Parsing.IsEndRequired = false;
             parser.Settings.Reading.Seed = randomSeed;

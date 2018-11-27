@@ -1,11 +1,4 @@
-﻿using SpiceSharp.Components;
-using SpiceSharpGUI.Windows.Controls;
-using SpiceSharp.Simulations;
-using SpiceSharpParser.ModelReaders.Netlist.Spice;
-using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
-using SpiceSharpGUI.Windows.Common;
-using SpiceSharpGUI.Windows.Logic;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
@@ -13,6 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
+using SpiceSharpGUI.Windows.Common;
+using SpiceSharpGUI.Windows.Controls;
+using SpiceSharpGUI.Windows.Logic;
+using SpiceSharpParser.ModelReaders.Netlist.Spice;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
 
 namespace SpiceSharpGUI.Windows.ViewModels
 {
@@ -184,6 +184,8 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
         public int? RandomSeed { get; set; }
 
+        public bool HasTitle { get; set; }
+
         /// <summary>
         /// Runs
         /// </summary>
@@ -206,7 +208,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
                 Plots = new TabsViewModel();
                 Prints = new ObservableCollection<UIElement>();
 
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode, RandomSeed);
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode, RandomSeed, HasTitle);
 
                 Logs += $"Simulations found: {model.Simulations.Count}\n";
                 int simulationNo = 0;
