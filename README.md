@@ -1,9 +1,6 @@
 # <img src="https://spicesharp.github.io/SpiceSharp/api/images/logo_full.svg" width="45px" /> Spice#/SpiceSharpGUI
- SpiceSharpGUI is a SPICE simulation environment built with SpiceSharp and SpiceSharpParser.
+ SpiceSharpGUI is a SPICE simulation environment for Windows built with SpiceSharp and SpiceSharpParser.
  
- There are two versions:
- * For Windows (built with WPF)
- * Portable  (built with Avalonia) (very limited)
  
  
  ## Features
