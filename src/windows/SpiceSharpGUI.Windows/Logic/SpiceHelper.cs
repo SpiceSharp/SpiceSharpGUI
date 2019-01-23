@@ -15,7 +15,6 @@ namespace SpiceSharpGUI.Windows.Logic
             parser.Settings.Parsing.IsEndRequired = false;
             parser.Settings.Reading.Seed = randomSeed;
             parser.Settings.Reading.EvaluatorMode = evaluatorMode;
-            parser.Settings.Reading.EvaluatorMode = SpiceExpressionMode.Spice3f5;
             parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
 
             var parserResult = parser.ParseNetlist(netlist);
