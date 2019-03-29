@@ -319,23 +319,27 @@ namespace SpiceSharpGUI.Windows.ViewModels
                     TreeViewItem objects = new TreeViewItem() { Header = "Objects" };
                     simulationItem.Items.Add(objects);
 
-                    var enumerator = model.Circuit.Entities.GetEnumerator();
-                    while (enumerator.MoveNext())
+                    using (var enumerator = model.Circuit.GetEnumerator())
                     {
-                        var entity = enumerator.Current;
-                        TreeViewItem item = new TreeViewItem() { Header = (string.Format("{0}     -    ({1})", entity.Name, entity)) };
-
-                        if (entity is Component c)
+                        while (enumerator.MoveNext())
                         {
-                            for (var i = 0; i < c.PinCount; i++)
-                            {
-                                var nodeId = c.GetNode(i);
-                                TreeViewItem nodeItem = new TreeViewItem() { Header = (string.Format("Node: {0}", nodeId)) };
-                                item.Items.Add(nodeItem);
-                            }
-                        }
+                            var entity = enumerator.Current;
+                            TreeViewItem item = new TreeViewItem()
+                                {Header = (string.Format("{0}     -    ({1})", entity.Name, entity))};
 
-                        objects.Items.Add(item);
+                            if (entity is Component c)
+                            {
+                                for (var i = 0; i < c.PinCount; i++)
+                                {
+                                    var nodeId = c.GetNode(i);
+                                    TreeViewItem nodeItem = new TreeViewItem()
+                                        {Header = (string.Format("Node: {0}", nodeId))};
+                                    item.Items.Add(nodeItem);
+                                }
+                            }
+
+                            objects.Items.Add(item);
+                        }
                     }
 
                     TreeViewItem variables = new TreeViewItem() { Header = "Variables" };
