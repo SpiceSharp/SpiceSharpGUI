@@ -6,6 +6,7 @@
  ## Features
  * Netlist text editor
  * MDI
+ * Saving results of .SAVE command to CSV files
  * Plots (thanks to OxyPlot library) with ability to export to PNG, BMP
  * Simulation internals views
  
