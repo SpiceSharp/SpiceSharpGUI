@@ -197,6 +197,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             netlistWindow.Netlist = Netlist;
             netlistWindow.RandomSeed = RandomSeed;
             netlistWindow.HasTitle = HasTitle;
+            netlistWindow.NetlistPath = Path;
             netlistWindow.Mode = (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode;
             netlistWindow.MaxDegreeOfParallelism = MaxDegreeOfParallelism;
             netlistWindow.Run();

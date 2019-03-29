@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,6 +16,7 @@ using SpiceSharpGUI.Windows.Controls;
 using SpiceSharpGUI.Windows.Logic;
 using SpiceSharpParser.ModelReaders.Netlist.Spice;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Exporters;
 
 namespace SpiceSharpGUI.Windows.ViewModels
 {
@@ -186,6 +190,8 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
         public bool HasTitle { get; set; }
 
+        public string NetlistPath { get; set; }
+
         /// <summary>
         /// Runs
         /// </summary>
@@ -209,6 +215,8 @@ namespace SpiceSharpGUI.Windows.ViewModels
                 Prints = new ObservableCollection<UIElement>();
 
                 var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode, RandomSeed, HasTitle);
+
+                SaveExportsToFile(model);
 
                 Logs += $"Simulations found: {model.Simulations.Count}\n";
                 int simulationNo = 0;
@@ -306,6 +314,57 @@ namespace SpiceSharpGUI.Windows.ViewModels
             {
                 Logs += ex.ToString();
                 Status = "Status: Error";
+            }
+        }
+
+        private void SaveExportsToFile(SpiceNetlistReaderResult model)
+        {
+            Dictionary<Export, List<string>> results = new Dictionary<Export, List<string>>();
+            foreach (var export in model.Exports)
+            {
+                results[export] = new List<string>();
+                export.Simulation.ExportSimulationData += (sender, e) => {
+                    try
+                    {
+                        if (export.Simulation is DC)
+                        {
+                            results[export].Add( $"{e.SweepValue};{export.Extract()}");
+                        }
+
+                        if (export.Simulation is OP)
+                        {
+                            results[export].Add($"{export.Extract()}");
+                        }
+
+                        if (export.Simulation is Transient)
+                        {
+                            results[export].Add($"{e.Time};{export.Extract()}");
+                        }
+
+                        if (export.Simulation is AC)
+                        {
+                            results[export].Add($"{e.Frequency};{export.Extract()}");
+                        }
+                    }
+                    catch
+                    {
+                    }
+                };
+            }
+
+            foreach (var export in results.Keys)
+            {
+                export.Simulation.AfterExecute += (sender, args) =>
+                {
+                    var exportTime = Environment.TickCount;
+                    var outputPath = Path.Combine(Directory.GetCurrentDirectory(),
+                        $"{Path.GetFileName(NetlistPath)}.{export.Simulation.Name}_{export.Name}_{exportTime}.RES");
+
+                    if (results[export].Any())
+                    {
+                        File.WriteAllLines(outputPath, results[export]);
+                    }
+                };
             }
         }
 
