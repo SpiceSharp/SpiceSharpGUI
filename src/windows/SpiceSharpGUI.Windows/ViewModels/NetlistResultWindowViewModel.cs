@@ -401,24 +401,6 @@ namespace SpiceSharpGUI.Windows.ViewModels
                         }
                     }
 
-                    TreeViewItem variables = new TreeViewItem() { Header = "Variables" };
-                    simulationItem.Items.Add(variables);
-
-                    foreach (var variable in simulation.Nodes.GetVariables())
-                    {
-                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", variable.Name, variable.UnknownType) };
-                        variables.Items.Add(item);
-                    }
-
-                    /*TreeViewItem parameters = new TreeViewItem() { Header = "Parameters" };
-                    simulationItem.Items.Add(parameters);
-
-                    foreach (var parameter in model.Evaluators[simulation].Parameters.Keys)
-                    {
-                        TreeViewItem item = new TreeViewItem { Header = string.Format("{0}     -     ({1})", parameter, model.Evaluators[simulation].GetParameterValue(parameter)) };
-                        parameters.Items.Add(item);
-                    }*/
-
                     this.Internals.Items.Add(new TreeItem() { Content = simulationItem });
                 });
             };
@@ -430,16 +412,28 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
             simulation.Run(model.Circuit);
 
-            simulationStats.Iterations = simulation.Statistics.Iterations;
-            simulationStats.SolveTime = simulation.Statistics.SolveTime.ElapsedMilliseconds;
-            simulationStats.LoadTime = simulation.Statistics.LoadTime.ElapsedMilliseconds;
-            simulationStats.ReorderTime = simulation.Statistics.ReorderTime.ElapsedMilliseconds;
-            simulationStats.BehaviorCreationTime = simulation.Statistics.BehaviorCreationTime.ElapsedMilliseconds;
-            simulationStats.Timepoints = simulation.Statistics.TimePoints;
-            simulationStats.TransientIterations = simulation.Statistics.TransientIterations;
-            simulationStats.TransientTime = simulation.Statistics.TransientTime.ElapsedMilliseconds;
-            simulationStats.AcceptedTimepoints = simulation.Statistics.Accepted;
-            simulationStats.RejectedTimepoints = simulation.Statistics.Rejected;
+            simulationStats.Iterations = simulation.Statistics.Get<BaseSimulationStatistics>().Iterations;
+            simulationStats.SolveTime = simulation.Statistics.Get<BaseSimulationStatistics>().SolveTime.ElapsedMilliseconds;
+            simulationStats.LoadTime = simulation.Statistics.Get<BaseSimulationStatistics>().LoadTime.ElapsedMilliseconds;
+            simulationStats.ReorderTime = simulation.Statistics.Get<BaseSimulationStatistics>().ReorderTime.ElapsedMilliseconds;
+            simulationStats.BehaviorCreationTime = simulation.Statistics
+                .Get<SpiceSharp.Simulations.SimulationStatistics>().BehaviorCreationTime.ElapsedMilliseconds;
+            try
+            {
+
+
+                simulationStats.Timepoints = simulation.Statistics.Get<TimeSimulationStatistics>().TimePoints;
+                simulationStats.TransientIterations =
+                    simulation.Statistics.Get<TimeSimulationStatistics>().TransientIterations;
+                simulationStats.TransientTime = simulation.Statistics.Get<TimeSimulationStatistics>().TransientTime
+                    .ElapsedMilliseconds;
+                simulationStats.AcceptedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Accepted;
+                simulationStats.RejectedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Rejected;
+            }
+            catch
+            {
+
+            }
 
             Dispatcher.Invoke(() =>
             {
