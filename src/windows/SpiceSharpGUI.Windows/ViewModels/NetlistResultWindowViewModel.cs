@@ -370,40 +370,6 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
         private void RunSimulation(SpiceNetlistReaderResult model, BaseSimulation simulation, int index)
         {
-            // Setup for Internals tab
-            simulation.AfterExecute += (arg, e) => {
-                Dispatcher.Invoke(() =>
-                {
-                    TreeViewItem simulationItem = new TreeViewItem() { Header = simulation.Name };
-                    TreeViewItem objects = new TreeViewItem() { Header = "Objects" };
-                    simulationItem.Items.Add(objects);
-
-                    using (var enumerator = model.Circuit.GetEnumerator())
-                    {
-                        while (enumerator.MoveNext())
-                        {
-                            var entity = enumerator.Current;
-                            TreeViewItem item = new TreeViewItem()
-                                {Header = (string.Format("{0}     -    ({1})", entity.Name, entity))};
-
-                            if (entity is Component c)
-                            {
-                                for (var i = 0; i < c.PinCount; i++)
-                                {
-                                    var nodeId = c.GetNode(i);
-                                    TreeViewItem nodeItem = new TreeViewItem()
-                                        {Header = (string.Format("Node: {0}", nodeId))};
-                                    item.Items.Add(nodeItem);
-                                }
-                            }
-
-                            objects.Items.Add(item);
-                        }
-                    }
-
-                    this.Internals.Items.Add(new TreeItem() { Content = simulationItem });
-                });
-            };
             var simulationStats = new SimulationStatistics()
             {
                 SimulationNo = index,
@@ -418,22 +384,17 @@ namespace SpiceSharpGUI.Windows.ViewModels
             simulationStats.ReorderTime = simulation.Statistics.Get<BaseSimulationStatistics>().ReorderTime.ElapsedMilliseconds;
             simulationStats.BehaviorCreationTime = simulation.Statistics
                 .Get<SpiceSharp.Simulations.SimulationStatistics>().BehaviorCreationTime.ElapsedMilliseconds;
-            try
-            {
 
-
-                simulationStats.Timepoints = simulation.Statistics.Get<TimeSimulationStatistics>().TimePoints;
-                simulationStats.TransientIterations =
-                    simulation.Statistics.Get<TimeSimulationStatistics>().TransientIterations;
-                simulationStats.TransientTime = simulation.Statistics.Get<TimeSimulationStatistics>().TransientTime
-                    .ElapsedMilliseconds;
-                simulationStats.AcceptedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Accepted;
-                simulationStats.RejectedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Rejected;
-            }
-            catch
-            {
-
-            }
+                if (simulation is TimeSimulation)
+                {
+                    simulationStats.Timepoints = simulation.Statistics.Get<TimeSimulationStatistics>().TimePoints;
+                    simulationStats.TransientIterations =
+                        simulation.Statistics.Get<TimeSimulationStatistics>().TransientIterations;
+                    simulationStats.TransientTime = simulation.Statistics.Get<TimeSimulationStatistics>().TransientTime
+                        .ElapsedMilliseconds;
+                    simulationStats.AcceptedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Accepted;
+                    simulationStats.RejectedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Rejected;
+                }
 
             Dispatcher.Invoke(() =>
             {

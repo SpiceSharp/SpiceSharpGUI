@@ -24,17 +24,6 @@
                             FontSize="10pt"/>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Internals" Name="CircuitElementsPanelTab">
-                <DockPanel Height="Auto" Name="CircuitElementsPanel" Width="Auto" >
-                    <TreeView Name="CircuitElementsTreeView" ItemsSource="{Binding Path=Internals.Items}">
-                        <TreeView.ItemTemplate>
-                            <DataTemplate>
-                                <ContentControl Content="{Binding Content}" />
-                            </DataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                </DockPanel>
-            </TabItem>
             <TabItem Name="LogsTab" Header="Logs">
                 <DockPanel Height="Auto" Name="WarningsPanel" Width="Auto" >
                     <TextBox Name="txtLogs" IsReadOnly="True" Text="{Binding Logs}" ScrollViewer.VerticalScrollBarVisibility="Visible" AcceptsReturn="True" />
