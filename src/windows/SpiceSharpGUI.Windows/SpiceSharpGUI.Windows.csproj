@@ -54,8 +54,8 @@
     <Reference Include="SpiceSharpBehavioral, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SpiceSharpBehavioral.1.1.3\lib\net45\SpiceSharpBehavioral.dll</HintPath>
     </Reference>
-    <Reference Include="SpiceSharpParser, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpiceSharp-Parser.1.3.1\lib\net45\SpiceSharpParser.dll</HintPath>
+    <Reference Include="SpiceSharpParser, Version=1.3.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpiceSharp-Parser.1.3.7\lib\net45\SpiceSharpParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
