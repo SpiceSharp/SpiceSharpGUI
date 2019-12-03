@@ -48,6 +48,9 @@ namespace SpiceSharpGUI.Windows.ViewModels
             {
                 var content = File.ReadAllText(openFileDialog.FileName);
 
+                var directoryName = Path.GetDirectoryName(openFileDialog.FileName);
+                Directory.SetCurrentDirectory(directoryName);
+
                 var item = new NetlistWindowViewModel(openFileDialog.FileName, Dispatcher, Windows);
                 item.Netlist = content;
 
