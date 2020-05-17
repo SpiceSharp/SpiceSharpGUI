@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpGUI.Windows.Common;
@@ -300,14 +301,6 @@ namespace SpiceSharpGUI.Windows.ViewModels
                     }
                 }
 
-                foreach (var warning in model.Warnings)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        Logs += "Warning: " + warning + "\n";
-                    });
-                }
-
                 Status = "Status: Finished";
             }
             catch (Exception ex)
@@ -317,7 +310,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
-        private void SaveExportsToFile(SpiceNetlistReaderResult model)
+        private void SaveExportsToFile(ISpiceModel<Circuit, Simulation> model)
         {
             Dictionary<Export, List<string>> results = new Dictionary<Export, List<string>>();
             foreach (var export in model.Exports)
@@ -368,7 +361,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
-        private void RunSimulation(SpiceNetlistReaderResult model, BaseSimulation simulation, int index)
+        private void RunSimulation(ISpiceModel<Circuit, Simulation> model, BaseSimulation simulation, int index)
         {
             var simulationStats = new SimulationStatistics()
             {

@@ -1,5 +1,8 @@
 ﻿using System;
+using SpiceSharp;
+using SpiceSharp.Simulations;
 using SpiceSharpParser;
+using SpiceSharpParser.ModelReaders.Netlist.Spice;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
 
@@ -7,7 +10,7 @@ namespace SpiceSharpGUI.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceSharpParser.ModelReaders.Netlist.Spice.SpiceNetlistReaderResult GetSpiceSharpNetlist(string netlist, SpiceExpressionMode evaluatorMode, int? randomSeed, bool hasTitle)
+        public static ISpiceModel<Circuit, Simulation> GetSpiceSharpNetlist(string netlist, SpiceExpressionMode evaluatorMode, int? randomSeed, bool hasTitle)
         {
             var parser = new SpiceParser();
             parser.Settings.Lexing.HasTitle = hasTitle;
@@ -18,7 +21,7 @@ namespace SpiceSharpGUI.Windows.Logic
             parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
 
             var parserResult = parser.ParseNetlist(netlist);
-            return parserResult.SpiceSharpModel;
+            return parserResult.SpiceModel;
         }
 
         public static bool IsPlotPositive(XyPlot plot)
