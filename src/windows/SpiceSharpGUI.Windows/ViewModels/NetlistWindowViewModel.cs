@@ -1,4 +1,5 @@
-﻿using SpiceSharpGUI.Windows.Common;
+﻿using SpiceSharp.Validation;
+using SpiceSharpGUI.Windows.Common;
 using SpiceSharpGUI.Windows.Logic;
 using System;
 using System.Collections.ObjectModel;
@@ -181,7 +182,9 @@ namespace SpiceSharpGUI.Windows.ViewModels
             try
             {
                 var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed, HasTitle);
+
                 model.Circuit.Validate();
+
                 MessageBox.Show("Validating was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)

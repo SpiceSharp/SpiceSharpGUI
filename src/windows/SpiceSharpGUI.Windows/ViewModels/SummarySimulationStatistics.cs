@@ -2,16 +2,11 @@
 {
     public class SummarySimulationStatistics
     {
-        public int Iterations { get; set; }
-        public double SolveTime { get; set; }
-        public double LoadTime { get; set; }
-        public double ReorderTime { get; set; }
         public double BehaviorCreationTime { get; set; }
-        public int Timepoints { get; set; }
-        public int TransientIterations { get; set; }
-        public double TransientTime { get; set; }
-        public int AcceptedTimepoints { get; set; }
-        public int RejectedTimepoints { get; set; }
-        public double TotalSimulationsTime { get; set; }
+        public long ExecutionTime { get; internal set; }
+        public long FinishTime { get; internal set; }
+        public long SetupTime { get; internal set; }
+        public long ValidationTime { get; internal set; }
+        public long TotalSimulationsTime { get; internal set; }
     }
 }

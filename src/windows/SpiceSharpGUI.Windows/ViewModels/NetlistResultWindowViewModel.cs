@@ -224,9 +224,9 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
                 Stopwatch simulationsWatch = new Stopwatch();
                 simulationsWatch.Start();
-                Parallel.ForEach<Simulation>(
+                System.Threading.Tasks.Parallel.ForEach<Simulation>(
                     model.Simulations, 
-                    new ParallelOptions() { MaxDegreeOfParallelism = MaxDegreeOfParallelism }, simulation => RunSimulation(model, (BaseSimulation)simulation, Interlocked.Increment(ref simulationNo)));
+                    new ParallelOptions() { MaxDegreeOfParallelism = MaxDegreeOfParallelism }, simulation => RunSimulation(model, (Simulation)simulation, Interlocked.Increment(ref simulationNo)));
                 simulationsWatch.Stop();
 
                 // Generate summary statistics
@@ -236,16 +236,11 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
                     foreach (var stat in Stats)
                     {
-                        summary.Iterations += stat.Iterations;
-                        summary.SolveTime += stat.SolveTime;
-                        summary.LoadTime += stat.LoadTime;
-                        summary.ReorderTime += stat.ReorderTime;
                         summary.BehaviorCreationTime += stat.BehaviorCreationTime;
-                        summary.Timepoints += stat.Timepoints;
-                        summary.TransientIterations += stat.TransientIterations;
-                        summary.TransientTime += stat.TransientTime;
-                        summary.AcceptedTimepoints += stat.AcceptedTimepoints;
-                        summary.RejectedTimepoints += stat.RejectedTimepoints;
+                        summary.FinishTime += stat.FinishTime;
+                        summary.ExecutionTime += stat.ExecutionTime;
+                        summary.SetupTime += stat.SetupTime;
+                        summary.ValidationTime += stat.ValidationTime;
                     }
                     summary.TotalSimulationsTime = simulationsWatch.ElapsedMilliseconds;
 
@@ -321,7 +316,9 @@ namespace SpiceSharpGUI.Windows.ViewModels
                     {
                         if (export.Simulation is DC)
                         {
-                            results[export].Add( $"{e.SweepValue};{export.Extract()}");
+                            //TODO: Add
+
+                            //results[export].Add( $"{e.};{export.Extract()}");
                         }
 
                         if (export.Simulation is OP)
@@ -361,7 +358,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
-        private void RunSimulation(ISpiceModel<Circuit, Simulation> model, BaseSimulation simulation, int index)
+        private void RunSimulation(ISpiceModel<Circuit, Simulation> model, Simulation simulation, int index)
         {
             var simulationStats = new SimulationStatistics()
             {
@@ -371,23 +368,11 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
             simulation.Run(model.Circuit);
 
-            simulationStats.Iterations = simulation.Statistics.Get<BaseSimulationStatistics>().Iterations;
-            simulationStats.SolveTime = simulation.Statistics.Get<BaseSimulationStatistics>().SolveTime.ElapsedMilliseconds;
-            simulationStats.LoadTime = simulation.Statistics.Get<BaseSimulationStatistics>().LoadTime.ElapsedMilliseconds;
-            simulationStats.ReorderTime = simulation.Statistics.Get<BaseSimulationStatistics>().ReorderTime.ElapsedMilliseconds;
-            simulationStats.BehaviorCreationTime = simulation.Statistics
-                .Get<SpiceSharp.Simulations.SimulationStatistics>().BehaviorCreationTime.ElapsedMilliseconds;
-
-                if (simulation is TimeSimulation)
-                {
-                    simulationStats.Timepoints = simulation.Statistics.Get<TimeSimulationStatistics>().TimePoints;
-                    simulationStats.TransientIterations =
-                        simulation.Statistics.Get<TimeSimulationStatistics>().TransientIterations;
-                    simulationStats.TransientTime = simulation.Statistics.Get<TimeSimulationStatistics>().TransientTime
-                        .ElapsedMilliseconds;
-                    simulationStats.AcceptedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Accepted;
-                    simulationStats.RejectedTimepoints = simulation.Statistics.Get<TimeSimulationStatistics>().Rejected;
-                }
+            simulationStats.BehaviorCreationTime = simulation.Statistics.BehaviorCreationTime.ElapsedMilliseconds;
+            simulationStats.ExecutionTime = simulation.Statistics.ExecutionTime.ElapsedMilliseconds;
+            simulationStats.FinishTime = simulation.Statistics.FinishTime.ElapsedMilliseconds;
+            simulationStats.SetupTime = simulation.Statistics.SetupTime.ElapsedMilliseconds;
+            simulationStats.ValidationTime = simulation.Statistics.ValidationTime.ElapsedMilliseconds;
 
             Dispatcher.Invoke(() =>
             {
