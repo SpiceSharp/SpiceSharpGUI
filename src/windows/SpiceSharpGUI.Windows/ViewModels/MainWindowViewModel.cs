@@ -3,6 +3,7 @@ using SpiceSharpGUI.Windows.Common;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Threading;
+using System.Text;
 
 namespace SpiceSharpGUI.Windows.ViewModels
 {
@@ -92,10 +93,29 @@ namespace SpiceSharpGUI.Windows.ViewModels
                 NetlistResultWindowViewModel netlistWindow = new NetlistResultWindowViewModel(Dispatcher);
                 netlistWindow.Title = "Results for: " + n.Title;
                 netlistWindow.Netlist = n.Netlist;
-                netlistWindow.Mode = (SpiceExpressionMode)n.SelectedMode;
+                netlistWindow.Encoding = GetEncoding(n.SelectedEncoding);
                 netlistWindow.Run();
                 this.Windows.Add(netlistWindow);
             }
+        }
+
+        public static Encoding GetEncoding(int selectedEncoding)
+        {
+           switch (selectedEncoding)
+            {
+                case 0:
+                    return Encoding.ASCII;
+                case 1:
+                    return Encoding.UTF8;
+                case 2:
+                    return Encoding.Unicode;
+                case 3:
+                    return Encoding.BigEndianUnicode;
+                case 4:
+                    return Encoding.UTF7;
+            }
+
+            return null;
         }
 
         private void NewNetlist(object parameter)

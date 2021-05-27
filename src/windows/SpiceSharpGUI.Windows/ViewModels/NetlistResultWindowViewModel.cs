@@ -4,19 +4,16 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
-using SpiceSharp;
-using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpGUI.Windows.Common;
 using SpiceSharpGUI.Windows.Controls;
 using SpiceSharpGUI.Windows.Logic;
 using SpiceSharpParser.ModelReaders.Netlist.Spice;
-using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Exporters;
 
 namespace SpiceSharpGUI.Windows.ViewModels
@@ -183,8 +180,6 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
         public Dispatcher Dispatcher { get; }
 
-        public SpiceExpressionMode Mode { get; set; }
-
         public int MaxDegreeOfParallelism { get; set; }
 
         public int? RandomSeed { get; set; }
@@ -192,6 +187,8 @@ namespace SpiceSharpGUI.Windows.ViewModels
         public bool HasTitle { get; set; }
 
         public string NetlistPath { get; set; }
+
+        public Encoding Encoding { get; set; }
 
         /// <summary>
         /// Runs
@@ -215,88 +212,106 @@ namespace SpiceSharpGUI.Windows.ViewModels
                 Plots = new TabsViewModel();
                 Prints = new ObservableCollection<UIElement>();
 
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, Mode, RandomSeed, HasTitle);
+                var parseResult = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, Encoding);
 
-                SaveExportsToFile(model);
-
-                Logs += $"Simulations found: {model.Simulations.Count}\n";
-                int simulationNo = 0;
-
-                Stopwatch simulationsWatch = new Stopwatch();
-                simulationsWatch.Start();
-                System.Threading.Tasks.Parallel.ForEach<Simulation>(
-                    model.Simulations, 
-                    new ParallelOptions() { MaxDegreeOfParallelism = MaxDegreeOfParallelism }, simulation => RunSimulation(model, (Simulation)simulation, Interlocked.Increment(ref simulationNo)));
-                simulationsWatch.Stop();
-
-                // Generate summary statistics
-                Dispatcher.Invoke(() =>
+                if (parseResult != null)
                 {
-                    var summary = new SummarySimulationStatistics();
+                    var model = new SpiceSharpParser.SpiceSharpReader().Read(parseResult.FinalModel);
 
-                    foreach (var stat in Stats)
+
+                    if (model == null)
                     {
-                        summary.BehaviorCreationTime += stat.BehaviorCreationTime;
-                        summary.FinishTime += stat.FinishTime;
-                        summary.ExecutionTime += stat.ExecutionTime;
-                        summary.SetupTime += stat.SetupTime;
-                        summary.ValidationTime += stat.ValidationTime;
+                        Logs += $"Errors in lexing: {parseResult.ValidationResult.HasError}\n";
                     }
-                    summary.TotalSimulationsTime = simulationsWatch.ElapsedMilliseconds;
-
-                    SummaryStats.Add(summary);
-                });
-
-                // Generate plots
-                if (model.XyPlots.Count > 0)
-                {
-                    PlotsEnabled = true;
-
-                    Logs += $"Creating plots: {model.XyPlots.Count}\n";
-
-                    if (model.XyPlots.Count > 0)
+                    else
                     {
-                        foreach (var plot in model.XyPlots)
+                        SaveExportsToFile(model);
+                        Logs += $"Simulations found: {model.Simulations.Count}\n";
+                        Logs += "Errors and warnings: \n";
+
+                        foreach (var log in model.ValidationResult)
                         {
-                            Dispatcher.Invoke(() =>
-                            {
-                                Plots.Items.Add(new TabItem() { Header = plot.Name, Content = new XyPlotControl() { Plot = plot } });
-                            });
+                            Logs += log.Message + ", line =" + log.LineInfo.LineNumber + "\n";
                         }
-                    }
-                }
 
-                // Generate plots
-                if (model.MonteCarloResult.Enabled)
-                {
-                    PlotsEnabled = true;
+                        int simulationNo = 0;
 
-                    Logs += $"Creating monte carlo plot\n";
+                        Stopwatch simulationsWatch = new Stopwatch();
+                        simulationsWatch.Start();
+                        System.Threading.Tasks.Parallel.ForEach<Simulation>(
+                            model.Simulations,
+                            new ParallelOptions() { MaxDegreeOfParallelism = MaxDegreeOfParallelism }, simulation => RunSimulation(model, (Simulation)simulation, Interlocked.Increment(ref simulationNo)));
+                        simulationsWatch.Stop();
 
-                    Dispatcher.Invoke(() =>
-                    {
-                        var plot = new HistogramPlotControl() { Data = model.MonteCarloResult };
-                        plot.DataBind();
-                        Plots.Items.Add(new TabItem() { Header = "Monte Carlo", Content = plot });
-                    });
-                }
-
-                Logs += $"Prints found: {model.Prints.Count}\n";
-
-                if (model.Prints.Count > 0)
-                {
-                    foreach (var print in model.Prints)
-                    {
+                        // Generate summary statistics
                         Dispatcher.Invoke(() =>
                         {
-                            PrintControl control = new PrintControl(print);
-                            control.DataBind();
-                            Prints.Add(control);
-                        });
-                    }
-                }
+                            var summary = new SummarySimulationStatistics();
 
-                Status = "Status: Finished";
+                            foreach (var stat in Stats)
+                            {
+                                summary.BehaviorCreationTime += stat.BehaviorCreationTime;
+                                summary.FinishTime += stat.FinishTime;
+                                summary.ExecutionTime += stat.ExecutionTime;
+                                summary.SetupTime += stat.SetupTime;
+                                summary.ValidationTime += stat.ValidationTime;
+                            }
+                            summary.TotalSimulationsTime = simulationsWatch.ElapsedMilliseconds;
+
+                            SummaryStats.Add(summary);
+                        });
+
+                        // Generate plots
+                        if (model.XyPlots.Count > 0)
+                        {
+                            PlotsEnabled = true;
+
+                            Logs += $"Creating plots: {model.XyPlots.Count}\n";
+
+                            if (model.XyPlots.Count > 0)
+                            {
+                                foreach (var plot in model.XyPlots)
+                                {
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        Plots.Items.Add(new TabItem() { Header = plot.Name, Content = new XyPlotControl() { Plot = plot } });
+                                    });
+                                }
+                            }
+                        }
+
+                        // Generate plots
+                        if (model.MonteCarloResult.Enabled)
+                        {
+                            PlotsEnabled = true;
+
+                            Logs += $"Creating monte carlo plot\n";
+
+                            Dispatcher.Invoke(() =>
+                            {
+                                var plot = new HistogramPlotControl() { Data = model.MonteCarloResult };
+                                plot.DataBind();
+                                Plots.Items.Add(new TabItem() { Header = "Monte Carlo", Content = plot });
+                            });
+                        }
+
+                        Logs += $"Prints found: {model.Prints.Count}\n";
+
+                        if (model.Prints.Count > 0)
+                        {
+                            foreach (var print in model.Prints)
+                            {
+                                Dispatcher.Invoke(() =>
+                                {
+                                    PrintControl control = new PrintControl(print);
+                                    control.DataBind();
+                                    Prints.Add(control);
+                                });
+                            }
+                        }
+                    }
+                    Status = "Status: Finished";
+                }
             }
             catch (Exception ex)
             {
@@ -305,7 +320,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
-        private void SaveExportsToFile(ISpiceModel<Circuit, Simulation> model)
+        private void SaveExportsToFile(SpiceSharpModel model)
         {
             Dictionary<Export, List<string>> results = new Dictionary<Export, List<string>>();
             foreach (var export in model.Exports)
@@ -358,7 +373,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
-        private void RunSimulation(ISpiceModel<Circuit, Simulation> model, Simulation simulation, int index)
+        private void RunSimulation(SpiceSharpModel model, Simulation simulation, int index)
         {
             var simulationStats = new SimulationStatistics()
             {

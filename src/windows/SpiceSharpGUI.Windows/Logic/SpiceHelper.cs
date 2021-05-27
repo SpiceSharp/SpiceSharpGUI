@@ -1,27 +1,27 @@
 ﻿using System;
-using SpiceSharp;
-using SpiceSharp.Simulations;
+using System.Text;
 using SpiceSharpParser;
-using SpiceSharpParser.ModelReaders.Netlist.Spice;
-using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
 
 namespace SpiceSharpGUI.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static ISpiceModel<Circuit, Simulation> GetSpiceSharpNetlist(string netlist, SpiceExpressionMode evaluatorMode, int? randomSeed, bool hasTitle)
+        public static SpiceNetlistParseResult GetSpiceSharpNetlist(string netlist, int? randomSeed, bool hasTitle, Encoding encoding)
         {
-            var parser = new SpiceParser();
+            var parser = new SpiceNetlistParser();
             parser.Settings.Lexing.HasTitle = hasTitle;
             parser.Settings.Parsing.IsNewlineRequired = false;
             parser.Settings.Parsing.IsEndRequired = false;
-            parser.Settings.Reading.Seed = randomSeed;
-            parser.Settings.Reading.EvaluatorMode = evaluatorMode;
             parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
+            
+            if (encoding != null)
+            {
+                parser.Settings.ExternalFilesEncoding = encoding;
+            }
 
             var parserResult = parser.ParseNetlist(netlist);
-            return parserResult.SpiceModel;
+            return parserResult;
         }
 
         public static bool IsPlotPositive(XyPlot plot)

@@ -109,18 +109,18 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
-        private int _selectedMode;
+        private int _selectedEncoding;
 
-        public int SelectedMode
+        public int SelectedEncoding
         {
             get
             {
-                return _selectedMode;
+                return _selectedEncoding;
             }
             set
             {
-                _selectedMode = value;
-                RaisePropertyChanged("SelectedMode");
+                _selectedEncoding = value;
+                RaisePropertyChanged("SelectedEncoding");
             }
         }
 
@@ -168,7 +168,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
         {
             try
             {
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed, HasTitle);
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, MainWindowViewModel.GetEncoding(SelectedEncoding));
                 MessageBox.Show("Parsing was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -181,9 +181,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
         {
             try
             {
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode, RandomSeed, HasTitle);
-
-                model.Circuit.Validate();
+                var parseResult = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, MainWindowViewModel.GetEncoding(SelectedEncoding));
 
                 MessageBox.Show("Validating was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -201,7 +199,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             netlistWindow.RandomSeed = RandomSeed;
             netlistWindow.HasTitle = HasTitle;
             netlistWindow.NetlistPath = Path;
-            netlistWindow.Mode = (SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation.SpiceExpressionMode)SelectedMode;
+            netlistWindow.Encoding = MainWindowViewModel.GetEncoding(SelectedEncoding);
             netlistWindow.MaxDegreeOfParallelism = MaxDegreeOfParallelism;
             netlistWindow.Run();
             this.Windows.Add(netlistWindow);
