@@ -96,7 +96,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
              
             model.Axes.Add(new CategoryAxis { Position = AxisPosition.Bottom, Unit = PlotModel.XUnit, ItemsSource = items, LabelField = "Label" });
             model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, MinimumPadding = 0, AbsoluteMinimum = 0 });
-            model.Series.Add(new ColumnSeries { Title = "Count", ItemsSource = items, ValueField = "Value" });
+            model.Series.Add(new BarSeries { Title = "Count", ItemsSource = items, ValueField = "Value" });
 
             return model;
         }

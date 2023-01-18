@@ -83,7 +83,7 @@ namespace SpiceSharpGUI.Windows.Controls
 
             if (dialog.ShowDialog() == true)
             {
-                var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
+                var pngExporter = new PngExporter { Width = 600, Height = 400 };
                 pngExporter.ExportToFile(((XyPlotViewModel)this.DataContext).OxyPlotModel, dialog.FileName);
                 MessageBox.Show("Saved", "SpiceSharpGUI");
             }
