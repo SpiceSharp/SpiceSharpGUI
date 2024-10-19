@@ -3,3 +3,5 @@ src/windows/.vs/
 src/windows/SpiceSharpGUI.Windows/obj/
 src/windows/SpiceSharpGUI.Windows/bin/
 src/windows/SpiceSharpGUI.Windows.sln.DotSettings.user
+/.vs/SpiceSharpGUI/v17
+/src/windows/SpiceSharpGUI.Windows/.vs

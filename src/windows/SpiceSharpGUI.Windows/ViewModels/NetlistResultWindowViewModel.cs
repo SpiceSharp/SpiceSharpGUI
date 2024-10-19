@@ -13,6 +13,7 @@ using SpiceSharp.Simulations;
 using SpiceSharpGUI.Windows.Common;
 using SpiceSharpGUI.Windows.Controls;
 using SpiceSharpGUI.Windows.Logic;
+using SpiceSharpParser.Common;
 using SpiceSharpParser.ModelReaders.Netlist.Spice;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Exporters;
 
@@ -238,7 +239,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
                         Stopwatch simulationsWatch = new Stopwatch();
                         simulationsWatch.Start();
-                        System.Threading.Tasks.Parallel.ForEach<Simulation>(
+                        System.Threading.Tasks.Parallel.ForEach<ISimulationWithEvents>(
                             model.Simulations,
                             new ParallelOptions() { MaxDegreeOfParallelism = MaxDegreeOfParallelism }, simulation => RunSimulation(model, (Simulation)simulation, Interlocked.Increment(ref simulationNo)));
                         simulationsWatch.Stop();
@@ -326,7 +327,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             foreach (var export in model.Exports)
             {
                 results[export] = new List<string>();
-                export.Simulation.ExportSimulationData += (sender, e) => {
+                export.Simulation.EventExportData += (sender, e) => {
                     try
                     {
                         if (export.Simulation is DC)
@@ -341,14 +342,14 @@ namespace SpiceSharpGUI.Windows.ViewModels
                             results[export].Add($"{export.Extract()}");
                         }
 
-                        if (export.Simulation is Transient)
+                        if (export.Simulation is Transient t)
                         {
-                            results[export].Add($"{e.Time};{export.Extract()}");
+                            results[export].Add($"{t.Time};{export.Extract()}");
                         }
 
-                        if (export.Simulation is AC)
+                        if (export.Simulation is AC f)
                         {
-                            results[export].Add($"{e.Frequency};{export.Extract()}");
+                            results[export].Add($"{f.Frequency};{export.Extract()}");
                         }
                     }
                     catch
@@ -359,7 +360,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
             foreach (var export in results.Keys)
             {
-                export.Simulation.AfterExecute += (sender, args) =>
+                export.Simulation.EventAfterExecute += (sender, args) =>
                 {
                     var exportTime = Environment.TickCount;
                     var outputPath = Path.Combine(Directory.GetCurrentDirectory(),
@@ -381,7 +382,14 @@ namespace SpiceSharpGUI.Windows.ViewModels
                 SimulationName = simulation.Name
             };
 
-            simulation.Run(model.Circuit);
+            var codes = simulation.Run(model.Circuit, -1);
+
+            if (simulation is ISimulationWithEvents sim)
+            {
+                codes = sim.InvokeEvents(codes);
+            }
+
+            codes.ToArray(); // evaluate
 
             simulationStats.BehaviorCreationTime = simulation.Statistics.BehaviorCreationTime.ElapsedMilliseconds;
             simulationStats.ExecutionTime = simulation.Statistics.ExecutionTime.ElapsedMilliseconds;
