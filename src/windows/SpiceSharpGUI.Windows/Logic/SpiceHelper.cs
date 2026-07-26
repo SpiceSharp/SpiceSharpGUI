@@ -2,24 +2,24 @@
 using System.Text;
 using SpiceSharpParser;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Plots;
+using SpiceSharpParser.CustomComponents;
 
 namespace SpiceSharpGUI.Windows.Logic
 {
     public class SpiceHelper
     {
-        public static SpiceNetlistParseResult GetSpiceSharpNetlist(string netlist, int? randomSeed, bool hasTitle, Encoding encoding)
+        public static SpiceNetlistParseResult GetSpiceSharpNetlist(string netlist, int? randomSeed, bool hasTitle, Encoding encoding, CompatibilityOptions compatibility)
         {
             var parser = new SpiceNetlistParser();
             parser.Settings.Lexing.HasTitle = hasTitle;
             parser.Settings.Parsing.IsNewlineRequired = false;
             parser.Settings.Parsing.IsEndRequired = false;
             parser.Settings.WorkingDirectory = Environment.CurrentDirectory;
-            
+            parser.Settings.Compatibility = compatibility;
             if (encoding != null)
             {
                 parser.Settings.ExternalFilesEncoding = encoding;
             }
-
             var parserResult = parser.ParseNetlist(netlist);
             return parserResult;
         }

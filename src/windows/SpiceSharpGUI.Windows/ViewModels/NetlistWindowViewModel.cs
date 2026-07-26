@@ -109,6 +109,21 @@ namespace SpiceSharpGUI.Windows.ViewModels
             }
         }
 
+        private int _selectedCompatiblity;
+        public int SelectedCompatiblity
+        {
+            get
+            {
+                return _selectedCompatiblity;
+            }
+
+            set
+            {
+                _selectedCompatiblity = value;
+                RaisePropertyChanged("SelectedCompatiblity");
+            }
+        }
+
         private int _selectedEncoding;
 
         public int SelectedEncoding
@@ -168,7 +183,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
         {
             try
             {
-                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, MainWindowViewModel.GetEncoding(SelectedEncoding));
+                var model = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, MainWindowViewModel.GetEncoding(SelectedEncoding), MainWindowViewModel.GetCompatibility(SelectedCompatiblity));
                 MessageBox.Show("Parsing was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -181,7 +196,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
         {
             try
             {
-                var parseResult = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, MainWindowViewModel.GetEncoding(SelectedEncoding));
+                var parseResult = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, MainWindowViewModel.GetEncoding(SelectedEncoding), MainWindowViewModel.GetCompatibility(SelectedCompatiblity));
 
                 MessageBox.Show("Validating was successful", "SpiceSharpGUI", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -200,6 +215,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
             netlistWindow.HasTitle = HasTitle;
             netlistWindow.NetlistPath = Path;
             netlistWindow.Encoding = MainWindowViewModel.GetEncoding(SelectedEncoding);
+            netlistWindow.CompatibilityOptions = MainWindowViewModel.GetCompatibility(SelectedCompatiblity);
             netlistWindow.MaxDegreeOfParallelism = MaxDegreeOfParallelism;
             netlistWindow.Run();
             this.Windows.Add(netlistWindow);

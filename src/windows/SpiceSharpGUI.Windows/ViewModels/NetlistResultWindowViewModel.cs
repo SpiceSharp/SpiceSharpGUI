@@ -13,7 +13,9 @@ using SpiceSharp.Simulations;
 using SpiceSharpGUI.Windows.Common;
 using SpiceSharpGUI.Windows.Controls;
 using SpiceSharpGUI.Windows.Logic;
+using SpiceSharpParser;
 using SpiceSharpParser.Common;
+using SpiceSharpParser.CustomComponents;
 using SpiceSharpParser.ModelReaders.Netlist.Spice;
 using SpiceSharpParser.ModelReaders.Netlist.Spice.Readers.Controls.Exporters;
 
@@ -191,6 +193,8 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
         public Encoding Encoding { get; set; }
 
+        public CompatibilityOptions CompatibilityOptions { get; set; }
+
         /// <summary>
         /// Runs
         /// </summary>
@@ -213,11 +217,13 @@ namespace SpiceSharpGUI.Windows.ViewModels
                 Plots = new TabsViewModel();
                 Prints = new ObservableCollection<UIElement>();
 
-                var parseResult = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, Encoding);
+                var parseResult = SpiceHelper.GetSpiceSharpNetlist(Netlist, RandomSeed, HasTitle, Encoding, CompatibilityOptions);
 
                 if (parseResult != null)
                 {
-                    var model = new SpiceSharpParser.SpiceSharpReader().Read(parseResult.FinalModel);
+                    var reader = new SpiceSharpParser.SpiceSharpReader();
+                    reader.Settings.UseCustomComponents();
+                    var model = reader.Read(parseResult.FinalModel);
 
 
                     if (model == null)

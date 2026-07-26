@@ -1,9 +1,10 @@
-﻿using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
-using SpiceSharpGUI.Windows.Common;
+﻿using SpiceSharpGUI.Windows.Common;
+using SpiceSharpParser;
+using SpiceSharpParser.ModelReaders.Netlist.Spice.Evaluation;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Threading;
 using System.Text;
+using System.Windows.Threading;
 
 namespace SpiceSharpGUI.Windows.ViewModels
 {
@@ -94,6 +95,7 @@ namespace SpiceSharpGUI.Windows.ViewModels
                 netlistWindow.Title = "Results for: " + n.Title;
                 netlistWindow.Netlist = n.Netlist;
                 netlistWindow.Encoding = GetEncoding(n.SelectedEncoding);
+                netlistWindow.CompatibilityOptions = GetCompatibility(n.SelectedCompatiblity);
                 netlistWindow.Run();
                 this.Windows.Add(netlistWindow);
             }
@@ -117,6 +119,22 @@ namespace SpiceSharpGUI.Windows.ViewModels
 
             return null;
         }
+
+        public static CompatibilityOptions GetCompatibility(int selected)
+        {
+            switch (selected)
+            {
+                case 0:
+                    return CompatibilityOptions.None;
+                case 1:
+                    return CompatibilityOptions.LTspice;
+                case 2:
+                    return CompatibilityOptions.PSpice;
+            }
+
+            return null;
+        }
+
 
         private void NewNetlist(object parameter)
         {

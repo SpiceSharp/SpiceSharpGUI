@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:SpiceSharpGUI.Windows"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
-        d:DesignHeight="600" d:DesignWidth="900">
+        d:DesignHeight="600" d:DesignWidth="1031.762">
     <DockPanel LastChildFill="True">
        
         <ToolBarTray DockPanel.Dock="Top">
@@ -50,6 +50,15 @@
                     <ComboBoxItem>UTF-16 LE</ComboBoxItem>
                     <ComboBoxItem>UTF-16 BE</ComboBoxItem>
                     <ComboBoxItem>UTF-7</ComboBoxItem>
+                </ComboBox>
+                <Separator Margin="20, 10"/>
+                <Label>
+                    Compatiblity mode
+                </Label>
+                <ComboBox Width="120" SelectedIndex="{Binding SelectedCompatiblity}">
+                    <ComboBoxItem IsSelected="True">None/Spice3f5</ComboBoxItem>
+                    <ComboBoxItem>LTSpice</ComboBoxItem>
+                    <ComboBoxItem>PSpice</ComboBoxItem>
                 </ComboBox>
             </ToolBar>
         </ToolBarTray>
